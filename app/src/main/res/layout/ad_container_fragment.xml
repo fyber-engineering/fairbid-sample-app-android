@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:layoutDirection="ltr"
+                tools:context=".InterstitialFragment">
+
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/Lin1"
+                    android:paddingTop="10dp"
+                    android:background="@color/main_fragment_background"
+                    android:paddingBottom="11dp"
+    >
+
+        <ImageView android:layout_width="30dp" android:layout_height="30dp"
+                   android:layout_alignParentLeft="true"
+                   android:id="@+id/back_button"
+
+                   android:background="@drawable/ic_keyboard_arrow_left_black_24dp"/>
+        <TextView
+                android:id="@+id/fragment_header"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="20sp"
+                android:lineSpacingMultiplier="1.29"
+                android:textColor="@color/purple_text"
+                android:gravity="center"
+                tools:text="Interstital"/>
+
+
+    </RelativeLayout>
+
+
+    <View
+            android:background="@color/gray_seperator_line"
+            android:id="@+id/border_one"
+            android:layout_below="@id/Lin1"
+            android:layout_height="1dp"
+            android:layout_width="match_parent"/>
+
+
+    <ImageView android:layout_width="40dp" android:layout_height="50dp" android:layout_below="@id/border_one"
+               android:layout_marginLeft="20dp"
+               android:layout_alignParentLeft="true"
+               android:layout_marginTop="26dp"
+               android:id="@+id/placement_icon"
+               android:layout_marginRight="5dp"
+    />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/placement_id"
+              android:gravity="bottom"
+              android:id="@+id/placement_id_tv"
+              android:height="25dp"
+              android:layout_toRightOf="@id/placement_icon"
+              android:layout_alignTop="@id/placement_icon"
+              android:layout_above="@id/placement_name_tv"
+              />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:height="25dp"
+              android:layout_toRightOf="@id/placement_icon"
+              android:gravity="top"
+
+              android:text="@string/placement_id"
+              android:textColor="@color/black"
+              android:id="@+id/placement_name_tv"
+              tools:text="vz182738917kldjsflk"
+              android:layout_alignBottom="@id/placement_icon"
+              />
+
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:layout_below="@id/placement_icon"
+                  android:gravity="center_horizontal"
+                  android:layout_marginTop="20dp"
+                  android:padding="16dp"
+                  android:layoutDirection="ltr"
+                  android:id="@+id/rel_layout1">
+
+        <include layout="@layout/button_with_progress" />
+
+
+        <Button android:layout_width="0dp" android:layout_height="wrap_content"
+                android:id="@+id/show_ad"
+
+                android:enabled="false"
+                android:layout_weight="0.5"
+
+                android:text="@string/show_ad"
+                android:layout_marginLeft="8dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:background="@drawable/button_effect"/>
+
+    </LinearLayout>
+
+
+    <!--Relevant only for BannerFragment-->
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_marginTop="20dp"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@id/rel_layout1"
+                 android:id="@+id/banner_container"
+                 android:layout_centerHorizontal="true"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_marginLeft="20dp"
+              android:layout_alignParentLeft="true"
+              android:layout_marginTop="15dp"
+              android:id="@+id/callbacks_list_tv"
+              android:layout_below="@id/banner_container"
+              android:text="@string/callbackks_list"
+    />
+
+    <View
+            android:layout_marginTop="11dp"
+            android:background="@color/gray_seperator_line"
+            android:id="@+id/border_two"
+            android:layout_below="@id/callbacks_list_tv"
+            android:layout_height="1dp"
+            android:layout_width="match_parent"/>
+
+
+    <android.support.v7.widget.RecyclerView android:layout_width="wrap_content"
+                                            android:layout_below="@id/border_two"
+                                            android:id="@+id/recycler_callbacks"
+                                            android:layout_marginBottom="10dp"
+                                            android:layout_above="@id/clean_callback_button"
+                                            android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/clean_callback_button"
+            android:textAllCaps="false"
+            android:enabled="false"
+            android:text="@string/clean_callbacks_list"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/clean_button_effect"/>
+
+
+</RelativeLayout>
