@@ -24,5 +24,4 @@ logback-test.xml
 gradle/
 gradlew
 gradlew.bat
-*.aar
-!libs/**/*.aar
+app/libs/*
