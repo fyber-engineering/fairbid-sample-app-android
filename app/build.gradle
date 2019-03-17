@@ -21,6 +21,15 @@ android {
         }
     }
 }
+allprojects {
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
+
 
 def fairBidVersion = "2.0.0"
 
@@ -33,4 +42,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //fairbid
+    implementation(name: 'fairbid-sdk-release', ext:'aar')
+    implementation(name: 'ia-mraid-kit-release', ext: 'aar')
+    implementation(name: 'ia-native-kit-release', ext: 'aar')
+    implementation(name: 'ia-sdk-core-release', ext: 'aar')
+    implementation(name: 'ia-video-kit-release', ext: 'aar')
 }
