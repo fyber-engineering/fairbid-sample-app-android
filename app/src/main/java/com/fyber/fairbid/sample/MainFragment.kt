@@ -1,6 +1,5 @@
 package com.fyber.fairbid.sample
 
-import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +17,6 @@ class MainFragment : Fragment() {
     private var interstitialButton: Button? = null
     private var rewardedButton: Button? = null
     private var testSuiteButton: Button? = null
-    private var mainActivity: FragmentListener? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,11 +36,10 @@ class MainFragment : Fragment() {
         setClickListener(testSuiteButton!!)
     }
 
-    fun attachFragmentToActivity(activity: FragmentListener) {
-        mainActivity = activity
-    }
 
     private fun setClickListener(button: Button) {
-        button.setOnClickListener { this.mainActivity!!.onButtonClicked(button) }
+        button.setOnClickListener {
+            (activity as FragmentListener).onButtonClicked(button)
+        }
     }
 }

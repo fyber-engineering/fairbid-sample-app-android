@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.Button
+import com.fyber.FairBid
 
 
 /**
@@ -30,6 +30,10 @@ import android.widget.Button
  */
 class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
 
+    companion object {
+        //TODO add comment here publisher id
+        private const val PUBLISHER_APP_ID = "109613"
+    }
 
     private val fragmentManager = supportFragmentManager
 
@@ -37,9 +41,10 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val fragment = MainFragment()
-        fragment.attachFragmentToActivity(this)
         fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
-
+        //TODO add comment start sdk
+        val fairBid = FairBid.configureForAppId(PUBLISHER_APP_ID).enableLogs()
+        fairBid.start(this)
     }
 
     override fun onButtonClicked(view: View) {
