@@ -18,16 +18,42 @@ package com.fyber.fairbid.sample
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.view.View
+import android.widget.Button
+
 
 /**
  * The Main Activity,
  * responsible for starting the FairBid SDK and displaying the different examples -
  *
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
+
+
+    private val fragmentManager = supportFragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val fragment = MainFragment()
+        fragment.attachFragmentToActivity(this)
+        fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
+
     }
+
+    override fun onButtonClicked(view: View) {
+        Log.v("MainFragment - ", "onButtonClicked name:" + view.id)
+        when (view.id) {
+            R.id.banner_button -> Log.v("MainFragment - ", "banner clicked");
+            R.id.rewarded_button -> Log.v("MainFragment - ", "rewareded clicked");
+            R.id.interstitial_button -> Log.v("MainFragment - ", "interstitial_button clicked");
+            R.id.test_suite_button -> Log.v("MainFragment - ", "test_suite_button clicked");
+            else -> { // Note the block
+                Log.v("MainFragment - ", "no button was mattached");
+            }
+        }
+    }
+
 
 }
