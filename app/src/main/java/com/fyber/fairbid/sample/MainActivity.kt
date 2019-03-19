@@ -28,36 +28,46 @@ import com.fyber.FairBid
  * responsible for starting the FairBid SDK and displaying the different examples -
  *
  */
+//TODO add comment here publisher id
+private const val PUBLISHER_APP_ID = "109613"
+
 class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
-
-    companion object {
-        //TODO add comment here publisher id
-        private const val PUBLISHER_APP_ID = "109613"
-    }
-
-    private val fragmentManager = supportFragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val fragment = MainFragment()
-        fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
         //TODO add comment start sdk
         val fairBid = FairBid.configureForAppId(PUBLISHER_APP_ID).enableLogs()
         fairBid.start(this)
     }
 
     override fun onButtonClicked(view: View) {
-        Log.v("MainFragment - ", "onButtonClicked name:" + view.id)
         when (view.id) {
             R.id.banner_button -> Log.v("MainFragment - ", "banner clicked");
-            R.id.rewarded_button -> Log.v("MainFragment - ", "rewareded clicked");
-            R.id.interstitial_button -> Log.v("MainFragment - ", "interstitial_button clicked");
-            R.id.test_suite_button -> Log.v("MainFragment - ", "test_suite_button clicked");
+            R.id.rewarded_button -> {
+                val rewardedFragment = RewardedFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, rewardedFragment)
+                    .addToBackStack(null).commit()
+            };
+            R.id.interstitial_button -> {
+                val interstitialFragment = InterstitialFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, interstitialFragment)
+                    .addToBackStack(null).commit()
+            }
+            R.id.test_suite_button -> {Log.v("MainFragment - ", "test_suite_button clicked");
+                FairBid.showTestSuite(this)
+            }
             else -> { // Note the block
-                Log.v("MainFragment - ", "no button was mattached");
+                Log.v("MainFragment - ", "else")
             }
         }
+    }
+
+    private fun replaceFragment()
+    {
+
     }
 
 

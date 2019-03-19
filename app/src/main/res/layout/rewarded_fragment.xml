@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                tools:context=".RewardedFragment">
+
+    <TextView
+            android:gravity="center_horizontal"
+            android:id="@+id/rewarded_header"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="REWARDED  HEADER"
+            android:textSize="50dp"/>
+
+    <View
+
+            android:background="@color/colorAccent"
+            android:id="@+id/border_one"
+            android:layout_below="@id/rewarded_header"
+            android:layout_height="2dp"
+            android:layout_width="match_parent"/>
+
+    <Button
+            android:id="@+id/request_video_rewarded"
+            android:layout_below="@id/border_one"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_width="wrap_content"
+            android:text="request"/>
+
+    <Button
+            android:gravity="center_horizontal"
+            android:layout_toRightOf="@id/request_video_rewarded"
+            android:id="@+id/show_video_rewarded"
+            android:layout_below="@id/border_one"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_width="wrap_content"
+            android:text="show"/>
+
+
+    <View
+            android:background="@color/colorAccent"
+            android:id="@+id/border_two"
+            android:layout_below="@id/show_video_rewarded"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"/>
+
+    <TextView
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:text="Logs will go here"
+            android:id="@+id/Logs"
+            android:layout_below="@id/border_two"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+    />
+
+
+</RelativeLayout>
