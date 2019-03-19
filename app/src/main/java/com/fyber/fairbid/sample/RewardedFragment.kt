@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.fyber.FairBid
 import com.fyber.fairbid.ads.Rewarded
 import com.fyber.fairbid.ads.rewarded.RewardedListener
 
@@ -18,8 +17,8 @@ private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 
 class RewardedFragment : Fragment() {
 
-    private var requestButton: Button? = null
-    private var showButton: Button? = null
+    private lateinit var requestButton: Button
+    private lateinit var showButton: Button
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,11 +30,11 @@ class RewardedFragment : Fragment() {
 
     private fun initializeUiControls(view: View) {
         requestButton = view.findViewById(R.id.request_video_rewarded)
-        requestButton!!.setOnClickListener {
+        requestButton.setOnClickListener {
             requestRewarded()
         }
         showButton = view.findViewById(R.id.show_video_rewarded)
-        showButton!!.setOnClickListener {
+        showButton.setOnClickListener {
             showRewaded()
         }
     }

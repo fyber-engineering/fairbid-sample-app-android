@@ -45,30 +45,29 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
 
     override fun onButtonClicked(view: View) {
         when (view.id) {
-            R.id.banner_button -> Log.v("MainFragment - ", "banner clicked");
+            R.id.banner_button -> {
+                val bannerFragment = BannerFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bannerFragment)
+                    .addToBackStack(null).commit()
+            }
             R.id.rewarded_button -> {
                 val rewardedFragment = RewardedFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, rewardedFragment)
                     .addToBackStack(null).commit()
-            };
+            }
             R.id.interstitial_button -> {
                 val interstitialFragment = InterstitialFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, interstitialFragment)
                     .addToBackStack(null).commit()
             }
-            R.id.test_suite_button -> {Log.v("MainFragment - ", "test_suite_button clicked");
+            R.id.test_suite_button -> {
+                Log.v("MainFragment - ", "test_suite_button clicked")
+                //TODO comment show test suite
                 FairBid.showTestSuite(this)
             }
-            else -> { // Note the block
+            else -> {
                 Log.v("MainFragment - ", "else")
             }
         }
     }
-
-    private fun replaceFragment()
-    {
-
-    }
-
-
 }

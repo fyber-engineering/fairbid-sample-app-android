@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import com.fyber.fairbid.ads.Interstitial
 import com.fyber.fairbid.ads.interstitial.InterstitialListener
 
@@ -16,10 +17,9 @@ private const val INTERSTITIAL_PLACEMENT_NAME = "Interstitial"
 private const val INTERSTITIAL_FRAGMENT_TAG = "InterstitialFragment"
 
 class InterstitialFragment : Fragment() {
-
-    private var requestButton: Button? = null
-    private var showButton: Button? = null
-
+    //Buttons
+    private lateinit var requestButton: Button
+    private lateinit var showButton: Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.interstitial_fragment, container, false)
@@ -30,11 +30,11 @@ class InterstitialFragment : Fragment() {
 
     private fun initializeUiControls(view: View) {
         requestButton = view.findViewById(R.id.request_interstitial)
-        requestButton!!.setOnClickListener {
+        requestButton.setOnClickListener {
             requestInterstitial()
         }
         showButton = view.findViewById(R.id.show_interstitial)
-        showButton!!.setOnClickListener {
+        showButton.setOnClickListener {
             showInterstitial()
         }
     }
@@ -55,7 +55,8 @@ class InterstitialFragment : Fragment() {
         //TODO add comment LISTENER
         val interstitialListener = object : InterstitialListener {
             override fun onShow(placement: String) {
-                Log.v(INTERSTITIAL_FRAGMENT_TAG, "onShow $placement")
+                Toast.makeText(context, "asda", Toast.LENGTH_SHORT).show()
+                //Log.v(INTERSTITIAL_FRAGMENT_TAG, "onShow $placement")
             }
 
             override fun onClick(placement: String) {
