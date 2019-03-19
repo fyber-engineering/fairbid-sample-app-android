@@ -16,11 +16,12 @@
 
 package com.fyber.fairbid.sample
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.View
 import com.fyber.FairBid
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
 /**
@@ -33,40 +34,46 @@ private const val PUBLISHER_APP_ID = "109613"
 
 class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
 
+    private val bannerFragment = BannerFragment()
+    private val rewardedFragment = RewardedFragment()
+    private val interstitialFragment = InterstitialFragment()
+    private val mainFragment = MainFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        CalligraphyConfig.initDefault(
+            CalligraphyConfig.Builder().setDefaultFontPath("/fonts/Raleway-Regular.ttf").setFontAttrId(
+                R.attr.fontPath
+            ).build()
+        )
         setContentView(R.layout.activity_main)
-        val fragment = MainFragment()
-        supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, mainFragment).commit()
         //TODO add comment start sdk
         val fairBid = FairBid.configureForAppId(PUBLISHER_APP_ID).enableLogs()
         fairBid.start(this)
     }
 
-    override fun onButtonClicked(view: View) {
-        when (view.id) {
-            R.id.banner_button -> {
-                val bannerFragment = BannerFragment()
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    }
+
+    override fun onButtonClicked(id: Int) {
+        when (id) {
+            R.drawable.banner_icon -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bannerFragment)
                     .addToBackStack(null).commit()
             }
-            R.id.rewarded_button -> {
-                val rewardedFragment = RewardedFragment()
+            R.drawable.rewarded_icon -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, rewardedFragment)
                     .addToBackStack(null).commit()
             }
-            R.id.interstitial_button -> {
-                val interstitialFragment = InterstitialFragment()
+            R.drawable.interstitial_icon -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, interstitialFragment)
                     .addToBackStack(null).commit()
             }
-            R.id.test_suite_button -> {
-                Log.v("MainFragment - ", "test_suite_button clicked")
+            R.drawable.ic_test_suite -> {
                 //TODO comment show test suite
                 FairBid.showTestSuite(this)
-            }
-            else -> {
-                Log.v("MainFragment - ", "else")
             }
         }
     }

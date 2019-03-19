@@ -1,73 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    tools:context=".MainActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:ignore="MissingPrefix"
+                android:background="@color/main_fragment_background"
+                tools:context=".MainActivity">
 
 
-    <TextView
-        android:gravity="center_horizontal"
-        android:id="@+id/fyber_header"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:text="HEADER"
-        android:textSize="50dp" />
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="140dp"
+                    android:paddingLeft="19dp"
+                    android:id="@+id/rel_layout1"
+                    android:background="@color/light_gray_background">
+        <TextView
+                android:textColor="@color/black"
 
-    <View
+                android:layout_marginBottom="28dp"
+                android:layout_alignParentBottom="true"
+                fontPath="fonts/Raleway-Regular"
+                android:id="@+id/sample_app_header"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/sample_app"
+                android:textSize="34sp"/>
+        <TextView
+                android:id="@+id/fairbid_version"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:textStyle="bold"
+                android:lineSpacingMultiplier="1.38"
+                android:textAllCaps="true"
+                android:text="@string/fyber_fairbid"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="13dp"
+                android:width="136dp"/>
 
-        android:background="@color/colorAccent"
-        android:id="@+id/border_one"
-        android:layout_alignBottom="@id/fyber_header"
-        android:layout_height="2dp"
-        android:layout_width="match_parent" />
-
-    <Button
-        android:id="@+id/banner_button"
-        android:layout_below="@id/border_one"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_width="wrap_content"
-        android:text="Banner" />
-
-    <Button
-        android:gravity="center_horizontal"
-        android:id="@+id/interstitial_button"
-        android:layout_below="@id/banner_button"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_width="wrap_content"
-        android:text="interstitial" />
-
-    <Button
-        android:gravity="center_horizontal"
-        android:id="@+id/rewarded_button"
-        android:layout_below="@id/interstitial_button"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_width="wrap_content"
-        android:text="Rewarded" />
+    </RelativeLayout>
 
     <View
-        android:background="@color/colorAccent"
-        android:id="@+id/border_two"
-        android:layout_below="@id/rewarded_button"
-        android:layout_height="2dp"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent" />
 
-    <Button
-        android:gravity="center_horizontal"
-        android:id="@+id/test_suite_button"
-        android:layout_below="@id/border_two"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_width="wrap_content"
-        android:text="Test suite" />
+            android:background="@color/gray_seperator_line"
+            android:id="@+id/border_one"
+            android:layout_alignBottom="@id/rel_layout1"
+            android:layout_height="2dp"
+            android:layout_width="match_parent"/>
+
+
+    <android.support.v7.widget.RecyclerView
+            android:background="@color/white"
+            android:paddingTop="15dp"
+            android:layout_below="@id/rel_layout1"
+            android:id="@+id/units_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <include layout="@layout/item_unit_row" android:layout_below="@id/units_recycler" android:layout_height="85dp"
+            android:layout_marginTop="30dp" android:layout_width="match_parent">
+
+
+    </include>
+
+
 
 </RelativeLayout>
