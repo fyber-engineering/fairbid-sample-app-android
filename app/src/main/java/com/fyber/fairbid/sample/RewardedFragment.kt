@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.fyber.fairbid.ads.Interstitial
 import com.fyber.fairbid.ads.Rewarded
 import com.fyber.fairbid.ads.rewarded.RewardedListener
 
@@ -81,8 +82,10 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
     private fun requestRewarded() {
         Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
         //TODO add comment Request REWADED PLACEMENT
-        Rewarded.request(REWARDED_PLACEMENT_NAME)
-        startRequestAnimiaon()
+        if (!Rewarded.isAvailable(REWARDED_PLACEMENT_NAME)) {
+            Rewarded.request(REWARDED_PLACEMENT_NAME)
+            startRequestAnimiaon()
+        }
     }
 
     private fun showRewaded() {
