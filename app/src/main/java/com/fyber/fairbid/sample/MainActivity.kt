@@ -50,16 +50,8 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
             ).build()
         )
         setContentView(R.layout.activity_main)
-        supportFragmentManager.beginTransaction().add(R.id.fragment_container, SplashScreenFragment()).commit()
-        Handler().postDelayed({
-            if(shouldSplashScreen) {
-                supportFragmentManager.beginTransaction().setCustomAnimations(R.anim.abc_fade_out, R.anim.abc_fade_out)
-                    .replace(R.id.fragment_container, mainFragment).commit()
-                shouldSplashScreen = false
-            }
-        }, 2000)
+        splashScreen()
         startFairBidSdk()
-
     }
 
     private fun startFairBidSdk() {
@@ -68,25 +60,36 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         fairBid.start(this)
     }
 
+    private fun splashScreen() {
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, SplashScreenFragment()).commit()
+        Handler().postDelayed({
+            if (shouldSplashScreen) {
+                supportFragmentManager.beginTransaction().setCustomAnimations(R.anim.abc_fade_out, R.anim.abc_fade_out)
+                    .replace(R.id.fragment_container, mainFragment).commitAllowingStateLoss()
+                shouldSplashScreen = false
+            }
+        }, 2000)
+    }
+
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    override fun onButtonClicked(id: Int) {
-        when (id) {
-            R.drawable.banner_icon -> {
+    override fun onButtonClicked(unitType: MainFragment.UnitType) {
+        when (unitType) {
+            MainFragment.UnitType.Banner -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bannerFragment)
                     .addToBackStack(null).commit()
             }
-            R.drawable.rewarded_icon -> {
+            MainFragment.UnitType.Rewarded -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, rewardedFragment)
                     .addToBackStack(null).commit()
             }
-            R.drawable.interstitial_icon -> {
+            MainFragment.UnitType.Interstitial -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, interstitialFragment)
                     .addToBackStack(null).commit()
             }
-            R.drawable.ic_test_suite -> {
+            MainFragment.UnitType.TestSuite -> {
                 //TODO comment show test suite
                 FairBid.showTestSuite(this)
             }

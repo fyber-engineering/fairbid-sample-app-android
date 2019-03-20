@@ -18,11 +18,14 @@ package com.fyber.fairbid.sample
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import com.fyber.fairbid.ads.Banner
 import com.fyber.fairbid.ads.banner.BannerError
 import com.fyber.fairbid.ads.banner.BannerListener
@@ -30,7 +33,7 @@ import com.fyber.fairbid.ads.banner.BannerOptions
 
 //TODO add comment banner placement NAME
 private const val BANNER_PLACEMENT_NAME = "Banner"
-
+private const val BANNER_FRAGMENT_HEADER = "Banner"
 private const val BANNER_FRAGMENT_TAG = "BannerFragment"
 
 
@@ -39,28 +42,61 @@ class BannerFragment : Fragment() {
     private lateinit var loadBannerButton: Button
     private lateinit var destroyBannerButton: Button
     private lateinit var bannerContainer: ViewGroup
+    private lateinit var recyclerView: RecyclerView
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.banner_fragment, container, false)
-        initializeUiControls(view)
+        val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
+        initializeUiElements(view)
         setListener()
         return view
     }
 
-    private fun initializeUiControls(view: View) {
-        loadBannerButton = view.findViewById(R.id.btn_loadbanner)
+    private fun initializeUiElements(view: View) {
+        initLogRecycler(view)
+        initTextViews(view)
+        initButtons(view)
+        bannerContainer = view.findViewById(R.id.banner_container)
+        bannerContainer.visibility = View.VISIBLE
+    }
+
+    private fun initLogRecycler(view: View) {
+        recyclerView = view.findViewById(R.id.recycler_callbacks)
+        LogsHelper.configureRecycler(recyclerView, activity!!)
+    }
+
+    private fun initTextViews(view: View) {
+        val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
+        placementName.text = BANNER_PLACEMENT_NAME
+        val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
+        headerName.text = BANNER_FRAGMENT_HEADER
+        val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
+        placementIcon.background = context!!.getDrawable(R.drawable.banner_icon)
+    }
+
+
+    private fun initButtons(view: View) {
+        loadBannerButton = view.findViewById(R.id.request_ad)
+        loadBannerButton.text = getString(R.string.show)
         loadBannerButton.setOnClickListener {
             displayBanner()
         }
-
-        destroyBannerButton = view.findViewById(R.id.btn_destroybanner)
+        destroyBannerButton = view.findViewById(R.id.show_ad)
+        destroyBannerButton.text = getString(R.string.destroy)
         destroyBannerButton.setOnClickListener {
             destroyBanner()
         }
+        val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
+        backButton.setOnClickListener {
+            activity!!.onBackPressed()
+        }
 
-        bannerContainer = view.findViewById(R.id.banner_container)
+        val cleanCallBacks: Button = view.findViewById(R.id.clean_callback_button) as Button
+        cleanCallBacks.setOnClickListener {
+            LogsHelper.clearLog(recyclerView)
+        }
     }
+
 
     private fun displayBanner() {
         //TODO added comment display banner
@@ -85,18 +121,22 @@ class BannerFragment : Fragment() {
         val bannerListener = object : BannerListener {
             override fun onClick(placement: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onClick $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_CLICK)
             }
 
             override fun onLoad(placement: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onLoad $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_LOAD)
             }
 
             override fun onError(placement: String, error: BannerError) {
                 Log.v(BANNER_FRAGMENT_TAG, "onerror $placement , error :" + error.errorMessage)
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_ERROR)
             }
 
             override fun onShow(placement: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onShow $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_SHOW)
             }
         }
         Banner.setBannerListener(bannerListener)

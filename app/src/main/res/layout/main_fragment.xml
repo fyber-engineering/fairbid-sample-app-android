@@ -47,12 +47,14 @@
 
 
     <android.support.v7.widget.RecyclerView
+            android:clickable="true"
             android:background="@color/white"
             android:paddingTop="15dp"
             android:layout_below="@id/rel_layout1"
             android:id="@+id/units_recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_height="wrap_content" android:focusable="true"/>
 
 
 </RelativeLayout>

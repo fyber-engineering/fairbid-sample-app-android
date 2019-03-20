@@ -2,40 +2,73 @@ package com.fyber.fairbid.sample
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import com.fyber.fairbid.ads.Rewarded
 import com.fyber.fairbid.ads.rewarded.RewardedListener
 
 //TODO add comment rewaeded placement NAME
 private const val REWARDED_PLACEMENT_NAME = "Rewarded"
-
+private const val REWARDED_FRAGMENT_HEADER = "Rewarded"
 private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 
 class RewardedFragment : Fragment() {
 
     private lateinit var requestButton: Button
     private lateinit var showButton: Button
+    private lateinit var recyclerView: RecyclerView
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.rewarded_fragment, container, false)
-        initializeUiControls(view)
+        val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
+        initializeUiElements(view)
         setListener()
         return view
     }
 
-    private fun initializeUiControls(view: View) {
-        requestButton = view.findViewById(R.id.request_video_rewarded)
+    private fun initializeUiElements(view: View) {
+        initLogRecycler(view)
+        initTextViews(view)
+        initButtons(view)
+    }
+
+    private fun initLogRecycler(view: View) {
+        recyclerView = view.findViewById(R.id.recycler_callbacks)
+        LogsHelper.configureRecycler(recyclerView, activity!!)
+    }
+
+    private fun initTextViews(view: View) {
+        val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
+        placementName.text = REWARDED_PLACEMENT_NAME
+        val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
+        headerName.text = REWARDED_FRAGMENT_HEADER
+        val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
+        placementIcon.background = context!!.getDrawable(R.drawable.rewarded_icon)
+    }
+
+    private fun initButtons(view: View) {
+        requestButton = view.findViewById(R.id.request_ad)
         requestButton.setOnClickListener {
             requestRewarded()
         }
-        showButton = view.findViewById(R.id.show_video_rewarded)
+        showButton = view.findViewById(R.id.show_ad)
         showButton.setOnClickListener {
             showRewaded()
+        }
+        val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
+        backButton.setOnClickListener {
+            activity!!.onBackPressed()
+        }
+
+        val cleanCallBacks: Button = view.findViewById(R.id.clean_callback_button) as Button
+        cleanCallBacks.setOnClickListener {
+            LogsHelper.clearLog(recyclerView)
         }
     }
 
@@ -56,46 +89,50 @@ class RewardedFragment : Fragment() {
         val rewardedListener = object : RewardedListener {
             override fun onShow(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onShow $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_SHOW)
             }
 
             override fun onClick(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onClick $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_CLICK)
             }
 
             override fun onHide(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onHide $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_HIDE)
             }
 
             override fun onShowFailure(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onShowFailure $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_SHOW_FAILURE)
             }
 
             override fun onAvailable(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onAvailable $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AVALIABLE)
             }
 
             override fun onUnavailable(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onUnavailable $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_UNAVAILABLE)
             }
 
             override fun onAudioStart(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onAudioStart $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AUDTIO_START)
             }
 
             override fun onAudioFinish(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onAudioFinish $placement")
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AUDIO_FINISH)
             }
 
             override fun onCompletion(placement: String, userRewarded: Boolean) {
-                if (userRewarded) {
-                    Log.v(REWARDED_FRAGMENT_TAG, "onCompletion rewarded $placement")
-                } else {
-                    Log.v(REWARDED_FRAGMENT_TAG, "onCompletion not rewarded $placement")
-                }
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_COMPLETION)
+                Log.v(REWARDED_FRAGMENT_TAG, "onCompletion rewarded $placement")
             }
 
         }
-
         Rewarded.setRewardedListener(rewardedListener)
     }
 

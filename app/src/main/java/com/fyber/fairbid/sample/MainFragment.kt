@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -18,7 +20,7 @@ import com.fyber.FairBid
 class MainFragment : Fragment() {
 
     interface FragmentListener {
-        fun onButtonClicked(id: Int)
+        fun onButtonClicked(unitType: UnitType)
     }
 
     private lateinit var recyclerView: RecyclerView
@@ -51,30 +53,31 @@ class MainFragment : Fragment() {
         private var unitIcon: ImageView = itemView.findViewById(R.id.row_unit_image)
         private var unitText: TextView = itemView.findViewById(R.id.row_text_unit)
         private var rightArrow: ImageView = itemView.findViewById(R.id.right_unit_arrow)
-        private var seperatorLine: View = itemView.findViewById(R.id.row_border)
 
         fun bind(unitRowData: UnitRowData, context: Context?) {
             unitIcon.background = context!!.getDrawable(unitRowData.resourceImage)
             unitText.text = unitRowData.unitText
             rightArrow.setOnClickListener {
-                (context as FragmentListener).onButtonClicked(unitRowData.resourceImage)
+                (context as FragmentListener).onButtonClicked(unitRowData.unitType)
             }
         }
     }
+
 
     class SeperatorViewHodler(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.item_seperator_row, parent, false))
 
     enum class RowType() { Row, Seperator }
-    data class UnitRowData(val unitText: String, val resourceImage: Int)
+    enum class UnitType() { Interstitial, Rewarded, Banner, TestSuite }
+    data class UnitRowData(val unitText: String, val resourceImage: Int, val unitType: UnitType)
     data class Row(val type: RowType = RowType.Row, val payload: Any? = null)
 
     private val mUnits = listOf(
-        Row(payload = UnitRowData("Interstitial", R.drawable.interstitial_icon)),
-        Row(payload = UnitRowData("Rewarded", R.drawable.rewarded_icon)),
-        Row(payload = UnitRowData("Banner", R.drawable.banner_icon)),
+        Row(payload = UnitRowData("Interstitial", R.drawable.interstitial_icon, UnitType.Interstitial)),
+        Row(payload = UnitRowData("Rewarded", R.drawable.rewarded_icon, UnitType.Rewarded)),
+        Row(payload = UnitRowData("Banner", R.drawable.banner_icon, UnitType.Banner)),
         Row(type = RowType.Seperator),
-        Row(payload = UnitRowData("Test Suite", R.drawable.ic_test_suite))
+        Row(payload = UnitRowData("Test Suite", R.drawable.ic_test_suite, UnitType.TestSuite))
     )
 
     class ListAdapter(private val list: List<Row>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -95,9 +98,14 @@ class MainFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
             if (getItemViewType(position) == RowType.Row.ordinal) {
+
                 val unitRowData: UnitRowData = list[position].payload as UnitRowData
                 (holder as UnitRowDataHolder).bind(unitRowData, mContext)
+                holder.itemView.setOnClickListener {
+                    (mContext as FragmentListener).onButtonClicked((list[position].payload as UnitRowData).unitType)
+                }
             }
         }
 

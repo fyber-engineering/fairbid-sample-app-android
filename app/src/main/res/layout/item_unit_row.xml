@@ -15,7 +15,7 @@
               android:lineSpacingMultiplier="1.29"
 
               android:textSize="15sp"
-              android:textColor="@color/purple_text_row_item"
+              android:textColor="@color/purple_text"
               android:layout_toRightOf="@id/row_unit_image"
               android:layout_marginLeft="12dp"
               android:gravity="center_vertical|left"
@@ -28,7 +28,6 @@
                android:background="@drawable/right_arrow" android:id="@+id/right_unit_arrow"/>
 
     <View
-            android:visibility="invisible"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="20dp"
             android:background="@color/gray_seperator_line"
