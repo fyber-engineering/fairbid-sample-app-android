@@ -54,12 +54,5 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    <include layout="@layout/item_unit_row" android:layout_below="@id/units_recycler" android:layout_height="85dp"
-            android:layout_marginTop="30dp" android:layout_width="match_parent">
-
-
-    </include>
-
-
 
 </RelativeLayout>

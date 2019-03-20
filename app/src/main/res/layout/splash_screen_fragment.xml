@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:animateLayoutChanges="true"
+             android:background="@color/fb_fyber"
+             tools:context=".testsuite.fragments.SplashScreenFragment">
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
+
+
+        <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/fyber_logo"
+                android:contentDescription="Fyber logo"/>
+
+        <LinearLayout
+                android:id="@+id/progress_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/sdk_version"
+            android:textAllCaps="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:background="@android:color/transparent"
+            android:textAppearance="@style/FB_ListView.TextAppearance.Primary"
+            tools:text="FYBER FAIRBID 2.0.0"/>
+
+
+</FrameLayout>

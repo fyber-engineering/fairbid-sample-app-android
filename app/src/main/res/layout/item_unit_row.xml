@@ -7,14 +7,13 @@
     <ImageView android:layout_width="40dp" android:layout_height="50dp" android:layout_centerVertical="true"
                android:layout_marginLeft="16dp"
                android:layout_marginTop="4dp"
-               android:background="@drawable/ic_test_suite"
                android:id="@+id/row_unit_image"/>
 
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:id="@+id/row_text_unit"
               android:lineSpacingMultiplier="1.29"
-                android:text="Test Suite"
+
               android:textSize="15sp"
               android:textColor="@color/purple_text_row_item"
               android:layout_toRightOf="@id/row_unit_image"
