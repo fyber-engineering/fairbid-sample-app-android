@@ -42,7 +42,7 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
-        LogsHelper.configureRecycler(recyclerView, activity!!,this)
+        LogsHelper.configureRecycler(recyclerView, activity!!, this)
     }
 
     private fun initButtons(view: View) {
@@ -61,7 +61,6 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
         cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
         cleanCallBacks.setOnClickListener {
-            cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_disabled)
             cleanCallBacks.isEnabled = false
             LogsHelper.clearLog(recyclerView)
         }
@@ -80,9 +79,10 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
     private fun requestInterstitial() {
         Log.v(INTERSTITIAL_FRAGMENT_TAG, "Requesting Interstitial")
         //TODO add comment Request Interstitial PLACEMENT
-        Interstitial.request(INTERSTITIAL_PLACEMENT_NAME)
-        startRequestAnimiaon()
-
+        if (!Interstitial.isAvailable(INTERSTITIAL_PLACEMENT_NAME)) {
+            Interstitial.request(INTERSTITIAL_PLACEMENT_NAME)
+            startRequestAnimiaon()
+        }
     }
 
     private fun showInterstitial() {
@@ -143,22 +143,22 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
     }
 
     private fun startRequestAnimiaon() {
+        showButton.isEnabled = false
         progressBar.visibility = View.VISIBLE
-        showButton.background = context!!.getDrawable(R.drawable.button_disabled)
     }
 
     private fun onAdAvilabileAnimation() {
         progressBar.visibility = View.GONE
-        showButton.background = context!!.getDrawable(R.drawable.button_enabled)
+        showButton.isEnabled = true
     }
 
     private fun resetAnimation() {
+        showButton.isEnabled = false
         progressBar.visibility = View.GONE
-        showButton.background = context!!.getDrawable(R.drawable.button_disabled)
     }
 
     override fun onFirstLogLine() {
-        cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_enabled)
+        cleanCallBacks.isEnabled = true
     }
 
 }

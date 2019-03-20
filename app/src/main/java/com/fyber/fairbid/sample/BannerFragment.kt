@@ -65,7 +65,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
 
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
-        LogsHelper.configureRecycler(recyclerView, activity!!,this)
+        LogsHelper.configureRecycler(recyclerView, activity!!, this)
     }
 
     private fun initTextViews(view: View) {
@@ -156,20 +156,20 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
 
     private fun startRequestAnimiaon() {
         progressBar.visibility = View.VISIBLE
-        destroyBannerButton.background = context!!.getDrawable(R.drawable.button_disabled)
+        destroyBannerButton.isEnabled = false
     }
 
     private fun onAdAvilabileAnimation() {
+        destroyBannerButton.isEnabled = true
         progressBar.visibility = View.GONE
-        destroyBannerButton.background = context!!.getDrawable(R.drawable.button_enabled)
     }
 
     private fun resetAnimation() {
+        destroyBannerButton.isEnabled = false
         progressBar.visibility = View.GONE
-        destroyBannerButton.background = context!!.getDrawable(R.drawable.button_disabled)
     }
 
     override fun onFirstLogLine() {
-        cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_enabled)
+        cleanCallBacks.isEnabled = true
     }
 }

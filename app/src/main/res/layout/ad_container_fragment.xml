@@ -74,13 +74,15 @@
 
         <Button android:layout_width="0dp" android:layout_height="wrap_content"
                 android:id="@+id/show_ad"
+
+                android:enabled="false"
                 android:layout_weight="0.5"
                 android:layout_toEndOf="@id/text_progress_bar"
                 android:text="@string/show_ad"
                 android:layout_marginStart="8dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:background="@drawable/button_disabled"/>
+                android:background="@drawable/button_effect"/>
 
     </LinearLayout>
 
@@ -130,7 +132,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="30dp"
-            android:background="@drawable/clean_callback_button_disabled"/>
+            android:background="@drawable/clean_button_effect"/>
 
 
 </RelativeLayout>
