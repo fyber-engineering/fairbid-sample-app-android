@@ -11,7 +11,7 @@
     <color name="main_fragment_background">#EFEFF4</color>
     <color name="gray_seperator_line">#C3C3C3</color>
     <color name="purple_text">#1D0047</color>
-
+    <color name= "disabled_button">#C5D0DE</color>
 
 
 </resources>

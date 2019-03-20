@@ -7,6 +7,7 @@ import android.support.annotation.RequiresApi
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
@@ -30,11 +31,12 @@ class LogsHelper {
         const val ON_ERROR = "onError()"
         const val ON_LOAD = "onLoad()"
 
-        fun configureRecycler(recyclerView: RecyclerView, activity: Activity) {
+        fun configureRecycler(recyclerView: RecyclerView, activity: Activity, listener: MainFragment.LogsListener) {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
                 val emptyLogRow = ArrayList<String>()
                 adapter = LogsAdapter(emptyLogRow)
+                (adapter as LogsAdapter).setListener(listener)
             }
         }
 
@@ -61,6 +63,7 @@ class LogsHelper {
     }
 
     class LogsAdapter(private val logsList: ArrayList<String>) : RecyclerView.Adapter<LogDataHolder>() {
+        private lateinit var listener: MainFragment.LogsListener
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogDataHolder {
             val inflater = LayoutInflater.from(parent.context)
@@ -74,7 +77,14 @@ class LogsHelper {
         override fun getItemCount(): Int = logsList.size
 
 
+        fun setListener(listener: MainFragment.LogsListener) {
+            this.listener = listener
+        }
+
         fun addLog(log: String) {
+            if (logsList.isEmpty()) {
+                listener.onFirstLogLine()
+            }
             logsList.add("${getCurrentTime()} - $log")
             notifyDataSetChanged()
         }
@@ -93,7 +103,7 @@ class LogsHelper {
             } else {
                 var date = Date();
                 val formatter = SimpleDateFormat("HH:mm:ss")
-                answer = formatter . format (date)
+                answer = formatter.format(date)
             }
             return answer
         }

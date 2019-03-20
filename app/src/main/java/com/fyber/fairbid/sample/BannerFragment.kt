@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.fyber.fairbid.ads.Banner
 import com.fyber.fairbid.ads.banner.BannerError
@@ -37,12 +38,14 @@ private const val BANNER_FRAGMENT_HEADER = "Banner"
 private const val BANNER_FRAGMENT_TAG = "BannerFragment"
 
 
-class BannerFragment : Fragment() {
+class BannerFragment : Fragment(), MainFragment.LogsListener {
 
-    private lateinit var loadBannerButton: Button
+    private lateinit var loadBannerButton: View
+    private lateinit var cleanCallBacks: Button
     private lateinit var destroyBannerButton: Button
     private lateinit var bannerContainer: ViewGroup
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,7 +65,7 @@ class BannerFragment : Fragment() {
 
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
-        LogsHelper.configureRecycler(recyclerView, activity!!)
+        LogsHelper.configureRecycler(recyclerView, activity!!,this)
     }
 
     private fun initTextViews(view: View) {
@@ -76,8 +79,11 @@ class BannerFragment : Fragment() {
 
 
     private fun initButtons(view: View) {
-        loadBannerButton = view.findViewById(R.id.request_ad)
-        loadBannerButton.text = getString(R.string.show)
+        progressBar = view.findViewById(R.id.progress_bar)
+        val textView: TextView = view.findViewById(R.id.request_ad)
+        textView.text = getString(R.string.show)
+        loadBannerButton = view.findViewById(R.id.text_progress_bar)
+
         loadBannerButton.setOnClickListener {
             displayBanner()
         }
@@ -91,8 +97,10 @@ class BannerFragment : Fragment() {
             activity!!.onBackPressed()
         }
 
-        val cleanCallBacks: Button = view.findViewById(R.id.clean_callback_button) as Button
+        cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
         cleanCallBacks.setOnClickListener {
+            cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_disabled)
+            cleanCallBacks.isEnabled = false
             LogsHelper.clearLog(recyclerView)
         }
     }
@@ -103,6 +111,7 @@ class BannerFragment : Fragment() {
         Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
         val bannerOptions: BannerOptions = getBannerOptions()
         Banner.display(BANNER_PLACEMENT_NAME, bannerOptions, activity)
+        startRequestAnimiaon()
     }
 
     //TODO add comment this function is OPTIONAL, default is bottom
@@ -114,6 +123,7 @@ class BannerFragment : Fragment() {
         //TODO added comment destroy banner
         Log.v(BANNER_FRAGMENT_TAG, "destroyBanner()")
         Banner.destroy(BANNER_PLACEMENT_NAME)
+        resetAnimation()
     }
 
     private fun setListener() {
@@ -127,11 +137,13 @@ class BannerFragment : Fragment() {
             override fun onLoad(placement: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onLoad $placement")
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_LOAD)
+                onAdAvilabileAnimation()
             }
 
             override fun onError(placement: String, error: BannerError) {
                 Log.v(BANNER_FRAGMENT_TAG, "onerror $placement , error :" + error.errorMessage)
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_ERROR)
+                resetAnimation()
             }
 
             override fun onShow(placement: String) {
@@ -140,5 +152,24 @@ class BannerFragment : Fragment() {
             }
         }
         Banner.setBannerListener(bannerListener)
+    }
+
+    private fun startRequestAnimiaon() {
+        progressBar.visibility = View.VISIBLE
+        destroyBannerButton.background = context!!.getDrawable(R.drawable.button_disabled)
+    }
+
+    private fun onAdAvilabileAnimation() {
+        progressBar.visibility = View.GONE
+        destroyBannerButton.background = context!!.getDrawable(R.drawable.button_enabled)
+    }
+
+    private fun resetAnimation() {
+        progressBar.visibility = View.GONE
+        destroyBannerButton.background = context!!.getDrawable(R.drawable.button_disabled)
+    }
+
+    override fun onFirstLogLine() {
+        cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_enabled)
     }
 }

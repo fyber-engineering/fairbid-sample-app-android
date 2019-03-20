@@ -22,6 +22,10 @@ class MainFragment : Fragment() {
     interface FragmentListener {
         fun onButtonClicked(unitType: UnitType)
     }
+    interface LogsListener {
+        fun onFirstLogLine()
+    }
+
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var fairBidVersionTextView: TextView
@@ -73,9 +77,9 @@ class MainFragment : Fragment() {
     data class Row(val type: RowType = RowType.Row, val payload: Any? = null)
 
     private val mUnits = listOf(
+        Row(payload = UnitRowData("Banner", R.drawable.banner_icon, UnitType.Banner)),
         Row(payload = UnitRowData("Interstitial", R.drawable.interstitial_icon, UnitType.Interstitial)),
         Row(payload = UnitRowData("Rewarded", R.drawable.rewarded_icon, UnitType.Rewarded)),
-        Row(payload = UnitRowData("Banner", R.drawable.banner_icon, UnitType.Banner)),
         Row(type = RowType.Seperator),
         Row(payload = UnitRowData("Test Suite", R.drawable.ic_test_suite, UnitType.TestSuite))
     )

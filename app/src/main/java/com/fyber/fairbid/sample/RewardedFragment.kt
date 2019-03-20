@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.fyber.fairbid.ads.Rewarded
 import com.fyber.fairbid.ads.rewarded.RewardedListener
@@ -18,11 +19,13 @@ private const val REWARDED_PLACEMENT_NAME = "Rewarded"
 private const val REWARDED_FRAGMENT_HEADER = "Rewarded"
 private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 
-class RewardedFragment : Fragment() {
+class RewardedFragment : Fragment(), MainFragment.LogsListener {
 
-    private lateinit var requestButton: Button
+    private lateinit var requestButton: View
+    private lateinit var cleanCallBacks: Button
     private lateinit var showButton: Button
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,7 +43,7 @@ class RewardedFragment : Fragment() {
 
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
-        LogsHelper.configureRecycler(recyclerView, activity!!)
+        LogsHelper.configureRecycler(recyclerView, activity!!,this)
     }
 
     private fun initTextViews(view: View) {
@@ -53,7 +56,7 @@ class RewardedFragment : Fragment() {
     }
 
     private fun initButtons(view: View) {
-        requestButton = view.findViewById(R.id.request_ad)
+        requestButton = view.findViewById(R.id.text_progress_bar)
         requestButton.setOnClickListener {
             requestRewarded()
         }
@@ -66,22 +69,27 @@ class RewardedFragment : Fragment() {
             activity!!.onBackPressed()
         }
 
-        val cleanCallBacks: Button = view.findViewById(R.id.clean_callback_button) as Button
+        cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
         cleanCallBacks.setOnClickListener {
+            cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_disabled)
+            cleanCallBacks.isEnabled = false
             LogsHelper.clearLog(recyclerView)
         }
+        progressBar = view.findViewById(R.id.progress_bar)
     }
 
     private fun requestRewarded() {
         Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
         //TODO add comment Request REWADED PLACEMENT
         Rewarded.request(REWARDED_PLACEMENT_NAME)
+        startRequestAnimiaon()
     }
 
     private fun showRewaded() {
         Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
         //TODO add comment show Interstitial PLACEMENT
         Rewarded.show(REWARDED_PLACEMENT_NAME, activity)
+        resetAnimation()
     }
 
     private fun setListener() {
@@ -110,11 +118,13 @@ class RewardedFragment : Fragment() {
             override fun onAvailable(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onAvailable $placement")
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AVALIABLE)
+                onAdAvilabileAnimation()
             }
 
             override fun onUnavailable(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onUnavailable $placement")
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_UNAVAILABLE)
+                resetAnimation()
             }
 
             override fun onAudioStart(placement: String) {
@@ -135,5 +145,25 @@ class RewardedFragment : Fragment() {
         }
         Rewarded.setRewardedListener(rewardedListener)
     }
+
+    private fun startRequestAnimiaon() {
+        progressBar.visibility = View.VISIBLE
+        showButton.background = context!!.getDrawable(R.drawable.button_disabled)
+    }
+
+    private fun onAdAvilabileAnimation() {
+        progressBar.visibility = View.GONE
+        showButton.background = context!!.getDrawable(R.drawable.button_enabled)
+    }
+
+    private fun resetAnimation() {
+        progressBar.visibility = View.GONE
+        showButton.background = context!!.getDrawable(R.drawable.button_disabled)
+    }
+
+    override fun onFirstLogLine() {
+        cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_enabled)
+    }
+
 
 }

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.fyber.fairbid.ads.Interstitial
 import com.fyber.fairbid.ads.interstitial.InterstitialListener
@@ -18,11 +19,13 @@ private const val INTERSTITIAL_PLACEMENT_NAME = "Interstitial"
 private const val INTERSTITIAL_FRAGMENT_HEADER = "Interstitial"
 private const val INTERSTITIAL_FRAGMENT_TAG = "InterstitialFragment"
 
-class InterstitialFragment : Fragment() {
+class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
-    private lateinit var requestButton: Button
+    private lateinit var cleanCallBacks: Button
+    private lateinit var requestButton: View
     private lateinit var showButton: Button
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
@@ -39,11 +42,11 @@ class InterstitialFragment : Fragment() {
 
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
-        LogsHelper.configureRecycler(recyclerView, activity!!)
+        LogsHelper.configureRecycler(recyclerView, activity!!,this)
     }
 
     private fun initButtons(view: View) {
-        requestButton = view.findViewById(R.id.request_ad)
+        requestButton = view.findViewById(R.id.text_progress_bar)
         requestButton.setOnClickListener {
             requestInterstitial()
         }
@@ -56,10 +59,13 @@ class InterstitialFragment : Fragment() {
             activity!!.onBackPressed()
         }
 
-        val cleanCallBacks: Button = view.findViewById(R.id.clean_callback_button) as Button
+        cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
         cleanCallBacks.setOnClickListener {
+            cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_disabled)
+            cleanCallBacks.isEnabled = false
             LogsHelper.clearLog(recyclerView)
         }
+        progressBar = view.findViewById(R.id.progress_bar)
     }
 
     private fun initTextViews(view: View) {
@@ -75,12 +81,15 @@ class InterstitialFragment : Fragment() {
         Log.v(INTERSTITIAL_FRAGMENT_TAG, "Requesting Interstitial")
         //TODO add comment Request Interstitial PLACEMENT
         Interstitial.request(INTERSTITIAL_PLACEMENT_NAME)
+        startRequestAnimiaon()
+
     }
 
     private fun showInterstitial() {
         Log.v(INTERSTITIAL_FRAGMENT_TAG, "Requesting Interstitial")
         //TODO add comment Request Interstitial PLACEMENT
         Interstitial.show(INTERSTITIAL_PLACEMENT_NAME, activity)
+        resetAnimation()
     }
 
     private fun setListener() {
@@ -99,6 +108,7 @@ class InterstitialFragment : Fragment() {
             override fun onHide(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onHide $placement")
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_HIDE)
+
             }
 
             override fun onShowFailure(placement: String) {
@@ -110,11 +120,13 @@ class InterstitialFragment : Fragment() {
             override fun onAvailable(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onAvailable $placement")
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AVALIABLE)
+                onAdAvilabileAnimation()
             }
 
             override fun onUnavailable(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onUnavailable $placement")
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_UNAVAILABLE)
+                resetAnimation()
             }
 
             override fun onAudioStart(placement: String) {
@@ -128,6 +140,25 @@ class InterstitialFragment : Fragment() {
             }
         }
         Interstitial.setInterstitialListener(interstitialListener)
+    }
+
+    private fun startRequestAnimiaon() {
+        progressBar.visibility = View.VISIBLE
+        showButton.background = context!!.getDrawable(R.drawable.button_disabled)
+    }
+
+    private fun onAdAvilabileAnimation() {
+        progressBar.visibility = View.GONE
+        showButton.background = context!!.getDrawable(R.drawable.button_enabled)
+    }
+
+    private fun resetAnimation() {
+        progressBar.visibility = View.GONE
+        showButton.background = context!!.getDrawable(R.drawable.button_disabled)
+    }
+
+    override fun onFirstLogLine() {
+        cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_enabled)
     }
 
 }
