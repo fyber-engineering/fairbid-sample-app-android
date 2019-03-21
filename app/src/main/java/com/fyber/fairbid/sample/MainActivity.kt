@@ -22,6 +22,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import com.fyber.FairBid
+import com.fyber.fairbid.utilities.MainFragment
+import com.fyber.fairbid.utilities.SplashScreenFragment
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
@@ -29,14 +31,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 /**
  * The Main Activity,
  * responsible for starting the FairBid SDK and displaying the different examples -
- *
  */
 class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
 
     companion object {
-        /**
-         * The app id provided through the Fyber console
-         */
+        /** The app id provided through the Fyber console*/
         private const val PUBLISHER_APP_ID = "109613"
     }
 
@@ -78,7 +77,9 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
     }
 
     private fun splashScreen() {
-        supportFragmentManager.beginTransaction().add(R.id.fragment_container, SplashScreenFragment()).commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container,
+            SplashScreenFragment()
+        ).commit()
         Handler().postDelayed({
             if (shouldSplashScreen) {
                 supportFragmentManager.beginTransaction().setCustomAnimations(R.anim.abc_fade_out, R.anim.abc_fade_out)

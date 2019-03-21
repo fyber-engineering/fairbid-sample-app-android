@@ -1,17 +1,31 @@
-package com.fyber.fairbid.sample
+/*
+ * Copyright (c) 2019. Fyber N.V
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.fyber.fairbid.utilities
 
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.fyber.FairBid
+import com.fyber.fairbid.sample.R
 
 /**
  * Internal class for displaying the sample with multiple choices.
@@ -22,11 +36,10 @@ class MainFragment : Fragment() {
     interface FragmentListener {
         fun onButtonClicked(unitType: UnitType)
     }
+
     interface LogsListener {
         fun onFirstLogLine()
     }
-
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var fairBidVersionTextView: TextView
 
@@ -77,11 +90,35 @@ class MainFragment : Fragment() {
     data class Row(val type: RowType = RowType.Row, val payload: Any? = null)
 
     private val mUnits = listOf(
-        Row(payload = UnitRowData("Banner", R.drawable.banner_icon, UnitType.Banner)),
-        Row(payload = UnitRowData("Interstitial", R.drawable.interstitial_icon, UnitType.Interstitial)),
-        Row(payload = UnitRowData("Rewarded", R.drawable.rewarded_icon, UnitType.Rewarded)),
+        Row(
+            payload = UnitRowData(
+                "Banner",
+                R.drawable.banner_icon,
+                UnitType.Banner
+            )
+        ),
+        Row(
+            payload = UnitRowData(
+                "Interstitial",
+                R.drawable.interstitial_icon,
+                UnitType.Interstitial
+            )
+        ),
+        Row(
+            payload = UnitRowData(
+                "Rewarded",
+                R.drawable.rewarded_icon,
+                UnitType.Rewarded
+            )
+        ),
         Row(type = RowType.Seperator),
-        Row(payload = UnitRowData("Test Suite", R.drawable.ic_test_suite, UnitType.TestSuite))
+        Row(
+            payload = UnitRowData(
+                "Test Suite",
+                R.drawable.ic_test_suite,
+                UnitType.TestSuite
+            )
+        )
     )
 
     class ListAdapter(private val list: List<Row>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

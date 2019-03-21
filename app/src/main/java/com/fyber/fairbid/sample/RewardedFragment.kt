@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2019. Fyber N.V
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.fyber.fairbid.sample
 
 import android.os.Bundle
@@ -11,16 +26,20 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.fyber.fairbid.ads.Interstitial
 import com.fyber.fairbid.ads.Rewarded
 import com.fyber.fairbid.ads.rewarded.RewardedListener
+import com.fyber.fairbid.utilities.LogsHelper
+import com.fyber.fairbid.utilities.MainFragment
 
-//TODO add comment rewaeded placement NAME
-private const val REWARDED_PLACEMENT_NAME = "Rewarded"
 private const val REWARDED_FRAGMENT_HEADER = "Rewarded"
 private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 
 class RewardedFragment : Fragment(), MainFragment.LogsListener {
+
+    companion object {
+        /** Rewarded's placement name */
+        private const val REWARDED_PLACEMENT_NAME = "Rewarded"
+    }
 
     private lateinit var requestButton: View
     private lateinit var cleanCallBacks: Button
@@ -34,7 +53,7 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
         initializeUiElements(view)
         setListener()
         if (Rewarded.isAvailable(REWARDED_PLACEMENT_NAME)) {
-            onAdAvilabileAnimation()
+            onAdAvailableAnimation()
         }
         return view
     }
@@ -62,11 +81,11 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
     private fun initButtons(view: View) {
         requestButton = view.findViewById(R.id.text_progress_bar)
         requestButton.setOnClickListener {
-            requestRewarded()
+            requestRewarded(REWARDED_PLACEMENT_NAME)
         }
         showButton = view.findViewById(R.id.show_ad)
         showButton.setOnClickListener {
-            showRewaded()
+            showRewarded(REWARDED_PLACEMENT_NAME)
         }
         val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
         backButton.setOnClickListener {
@@ -82,24 +101,33 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
         progressBar = view.findViewById(R.id.progress_bar)
     }
 
-    private fun requestRewarded() {
+    /**
+     * Called when the requestButton is clicked
+     * @param rewardedPlacementName name of placement to be requested
+     */
+    private fun requestRewarded(rewardedPlacementName: String) {
         Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
-        //TODO add comment Request REWADED PLACEMENT
-        if (!Rewarded.isAvailable(REWARDED_PLACEMENT_NAME)) {
-            Rewarded.request(REWARDED_PLACEMENT_NAME)
-            startRequestAnimiaon()
+        /** Is interstitial Rewarded name is available */
+        if (!Rewarded.isAvailable(rewardedPlacementName)) {
+            Rewarded.request(rewardedPlacementName)
+            startRequestAnimation()
         }
     }
 
-    private fun showRewaded() {
+    /**
+     * Called when the showButton is clicked
+     * @param rewardedPlacementName name of placement to be displayed
+     */
+    private fun showRewarded(rewardedPlacementName: String) {
         Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
-        //TODO add comment show Interstitial PLACEMENT
-        Rewarded.show(REWARDED_PLACEMENT_NAME, activity)
+        Rewarded.show(rewardedPlacementName, activity)
         resetAnimation()
     }
 
+    /**
+     * Listen to FairBid Rewarded Callbacks
+     */
     private fun setListener() {
-        //TODO add comment LISTENER
         val rewardedListener = object : RewardedListener {
             override fun onShow(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onShow $placement")
@@ -124,7 +152,7 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
             override fun onAvailable(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onAvailable $placement")
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AVALIABLE)
-                onAdAvilabileAnimation()
+                onAdAvailableAnimation()
             }
 
             override fun onUnavailable(placement: String) {
@@ -152,12 +180,12 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
         Rewarded.setRewardedListener(rewardedListener)
     }
 
-    private fun startRequestAnimiaon() {
+    private fun startRequestAnimation() {
         progressBar.visibility = View.VISIBLE
         showButton.isEnabled = false
     }
 
-    private fun onAdAvilabileAnimation() {
+    private fun onAdAvailableAnimation() {
         showButton.isEnabled = true
         progressBar.visibility = View.GONE
     }

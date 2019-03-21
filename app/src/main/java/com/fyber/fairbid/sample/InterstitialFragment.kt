@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2019. Fyber N.V
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.fyber.fairbid.sample
 
 import android.os.Bundle
@@ -13,13 +28,19 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.fyber.fairbid.ads.Interstitial
 import com.fyber.fairbid.ads.interstitial.InterstitialListener
+import com.fyber.fairbid.utilities.LogsHelper
+import com.fyber.fairbid.utilities.MainFragment
 
-//TODO add comment rewaeded placement NAME
-private const val INTERSTITIAL_PLACEMENT_NAME = "Interstitial"
 private const val INTERSTITIAL_FRAGMENT_HEADER = "Interstitial"
 private const val INTERSTITIAL_FRAGMENT_TAG = "InterstitialFragment"
 
 class InterstitialFragment : Fragment(), MainFragment.LogsListener {
+
+
+    companion object {
+        /** Interstitial's placement name */
+        private const val INTERSTITIAL_PLACEMENT_NAME = "Interstitial"
+    }
 
     private lateinit var cleanCallBacks: Button
     private lateinit var requestButton: View
@@ -32,7 +53,7 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
         initializeUiElements(view)
         setListener()
         if (Interstitial.isAvailable(INTERSTITIAL_PLACEMENT_NAME)) {
-            onAdAvilabileAnimation()
+            onAdAvailableAnimation()
         }
         return view
     }
@@ -51,11 +72,11 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
     private fun initButtons(view: View) {
         requestButton = view.findViewById(R.id.text_progress_bar)
         requestButton.setOnClickListener {
-            requestInterstitial()
+            requestInterstitial(INTERSTITIAL_PLACEMENT_NAME)
         }
         showButton = view.findViewById(R.id.show_ad)
         showButton.setOnClickListener {
-            showInterstitial()
+            showInterstitial(INTERSTITIAL_PLACEMENT_NAME)
         }
         val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
         backButton.setOnClickListener {
@@ -79,24 +100,33 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
         placementIcon.background = context!!.getDrawable(R.drawable.interstitial_icon)
     }
 
-    private fun requestInterstitial() {
+    /**
+     * Called when the requestButton is clicked
+     * @param interstitialPlacementName name of placement to be requested
+     */
+    private fun requestInterstitial(interstitialPlacementName: String) {
         Log.v(INTERSTITIAL_FRAGMENT_TAG, "Requesting Interstitial")
-        //TODO add comment Request Interstitial PLACEMENT
-        if (!Interstitial.isAvailable(INTERSTITIAL_PLACEMENT_NAME)) {
-            Interstitial.request(INTERSTITIAL_PLACEMENT_NAME)
-            startRequestAnimiaon()
+        /** Is interstitial placement name is available */
+        if (!Interstitial.isAvailable(interstitialPlacementName)) {
+            Interstitial.request(interstitialPlacementName)
+            startRequestAnimation()
         }
     }
 
-    private fun showInterstitial() {
+    /**
+     * Called when the showButton is clicked
+     * @param interstitialPlacementName name of placement to be displayed
+     */
+    private fun showInterstitial(interstitialPlacementName: String) {
         Log.v(INTERSTITIAL_FRAGMENT_TAG, "Requesting Interstitial")
-        //TODO add comment Request Interstitial PLACEMENT
-        Interstitial.show(INTERSTITIAL_PLACEMENT_NAME, activity)
+        Interstitial.show(interstitialPlacementName, activity)
         resetAnimation()
     }
 
+    /**
+     * Listen to FairBid Interstitial Callbacks
+     */
     private fun setListener() {
-        //TODO add comment LISTENER
         val interstitialListener = object : InterstitialListener {
             override fun onShow(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onShow $placement")
@@ -123,7 +153,7 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
             override fun onAvailable(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onAvailable $placement")
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AVALIABLE)
-                onAdAvilabileAnimation()
+                onAdAvailableAnimation()
             }
 
             override fun onUnavailable(placement: String) {
@@ -145,12 +175,12 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
         Interstitial.setInterstitialListener(interstitialListener)
     }
 
-    private fun startRequestAnimiaon() {
+    private fun startRequestAnimation() {
         showButton.isEnabled = false
         progressBar.visibility = View.VISIBLE
     }
 
-    private fun onAdAvilabileAnimation() {
+    private fun onAdAvailableAnimation() {
         progressBar.visibility = View.GONE
         showButton.isEnabled = true
     }

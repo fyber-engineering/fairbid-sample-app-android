@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.fyber.fairbid.sample
 
 import android.os.Bundle
@@ -31,14 +30,18 @@ import com.fyber.fairbid.ads.Banner
 import com.fyber.fairbid.ads.banner.BannerError
 import com.fyber.fairbid.ads.banner.BannerListener
 import com.fyber.fairbid.ads.banner.BannerOptions
+import com.fyber.fairbid.utilities.LogsHelper
+import com.fyber.fairbid.utilities.MainFragment
 
-//TODO add comment banner placement NAME
-private const val BANNER_PLACEMENT_NAME = "Banner"
 private const val BANNER_FRAGMENT_HEADER = "Banner"
 private const val BANNER_FRAGMENT_TAG = "BannerFragment"
 
-
 class BannerFragment : Fragment(), MainFragment.LogsListener {
+
+    companion object {
+        /** Banner's placement name */
+        private const val BANNER_PLACEMENT_NAME = "Banner"
+    }
 
     private lateinit var loadBannerButton: View
     private lateinit var cleanCallBacks: Button
@@ -52,7 +55,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
         val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
         initializeUiElements(view)
         setListener()
-        destroyBanner()
+        destroyBanner(BANNER_PLACEMENT_NAME)
         return view
     }
 
@@ -86,12 +89,12 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
         loadBannerButton = view.findViewById(R.id.text_progress_bar)
 
         loadBannerButton.setOnClickListener {
-            displayBanner()
+            displayBanner(BANNER_PLACEMENT_NAME)
         }
         destroyBannerButton = view.findViewById(R.id.show_ad)
         destroyBannerButton.text = getString(R.string.destroy)
         destroyBannerButton.setOnClickListener {
-            destroyBanner()
+            destroyBanner(BANNER_PLACEMENT_NAME)
         }
         val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
         backButton.setOnClickListener {
@@ -105,29 +108,38 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
         }
     }
 
-
-    private fun displayBanner() {
-        //TODO added comment display banner
+    /**
+     * Called when the loadBannerButton is clicked
+     * @param bannerPlacementName name of placement to be requested
+     */
+    private fun displayBanner(bannerPlacementName: String) {
         Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
         val bannerOptions: BannerOptions = getBannerOptions()
-        Banner.display(BANNER_PLACEMENT_NAME, bannerOptions, activity)
+        Banner.display(bannerPlacementName, bannerOptions, activity)
         startRequestAnimiaon()
     }
 
-    //TODO add comment this function is OPTIONAL, default is bottom
+    /**
+     * Called when the destroyBannerButton is clicked
+     * @param bannerPlacementName name of placement to be requested
+     */
+    private fun destroyBanner(bannerPlacementName: String) {
+        Log.v(BANNER_FRAGMENT_TAG, "destroyBanner()")
+        Banner.destroy(bannerPlacementName)
+        resetAnimation()
+    }
+
+    /**
+     * Example how to initialize the ad banner container
+     */
     private fun getBannerOptions(): BannerOptions {
         return BannerOptions().placeInContainer(bannerContainer)
     }
 
-    private fun destroyBanner() {
-        //TODO added comment destroy banner
-        Log.v(BANNER_FRAGMENT_TAG, "destroyBanner()")
-        Banner.destroy(BANNER_PLACEMENT_NAME)
-        resetAnimation()
-    }
-
+    /**
+     * Listen to FairBid Banner Callbacks
+     */
     private fun setListener() {
-        //TODO add comment LISTENER
         val bannerListener = object : BannerListener {
             override fun onClick(placement: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onClick $placement")
@@ -142,7 +154,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
 
             override fun onError(placement: String, error: BannerError) {
                 Log.v(BANNER_FRAGMENT_TAG, "onerror $placement , error :" + error.errorMessage)
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_ERROR)
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_ERROR + error.errorMessage)
                 resetAnimation()
             }
 
