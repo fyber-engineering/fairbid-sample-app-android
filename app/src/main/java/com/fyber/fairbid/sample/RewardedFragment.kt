@@ -34,6 +34,10 @@ import com.fyber.fairbid.utilities.MainFragment
 private const val REWARDED_FRAGMENT_HEADER = "Rewarded"
 private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 
+/**
+ * The Rewarded Fragment,
+ * Responsible to demonstrate how to display rewarded ads
+ */
 class RewardedFragment : Fragment(), MainFragment.LogsListener {
 
     companion object {

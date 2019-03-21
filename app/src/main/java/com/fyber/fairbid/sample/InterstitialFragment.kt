@@ -34,6 +34,10 @@ import com.fyber.fairbid.utilities.MainFragment
 private const val INTERSTITIAL_FRAGMENT_HEADER = "Interstitial"
 private const val INTERSTITIAL_FRAGMENT_TAG = "InterstitialFragment"
 
+/**
+ * The Interstitial Fragment,
+ * Responsible to demonstrate how to display interstitial ads
+ */
 class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
 

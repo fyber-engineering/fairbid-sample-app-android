@@ -36,6 +36,10 @@ import com.fyber.fairbid.utilities.MainFragment
 private const val BANNER_FRAGMENT_HEADER = "Banner"
 private const val BANNER_FRAGMENT_TAG = "BannerFragment"
 
+/**
+ * The Banner Fragment,
+ * Responsible to demonstrate how to display banner ads
+ */
 class BannerFragment : Fragment(), MainFragment.LogsListener {
 
     companion object {
