@@ -64,11 +64,6 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
         return fragmentView
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        LogsHelper.clearLog(recyclerView)
-    }
-
     private fun initializeUiElements(view: View) {
         initLogRecycler(view)
         initTextViews(view)
