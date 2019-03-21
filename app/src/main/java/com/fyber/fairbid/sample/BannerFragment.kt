@@ -43,7 +43,7 @@ private const val BANNER_FRAGMENT_TAG = "BannerFragment"
 class BannerFragment : Fragment(), MainFragment.LogsListener {
 
     companion object {
-        /** Banner's placement name */
+        /** Banner's placement name - configure at Fyber console*/
         private const val BANNER_PLACEMENT_NAME = "Banner"
     }
 
@@ -53,14 +53,23 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
     private lateinit var bannerContainer: ViewGroup
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
+    private var fragmentView: View? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
-        initializeUiElements(view)
-        setListener()
-        destroyBanner(BANNER_PLACEMENT_NAME)
-        return view
+        if (fragmentView == null) {
+            fragmentView = inflater.inflate(R.layout.ad_container_fragment, container, false)
+            fragmentView?.let { it ->
+                initializeUiElements(it)
+                setListener()
+            }
+        }
+        return fragmentView
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LogsHelper.clearLog(recyclerView)
     }
 
     private fun initializeUiElements(view: View) {
@@ -84,7 +93,6 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
         val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
         placementIcon.background = context!!.getDrawable(R.drawable.banner_icon)
     }
-
 
     private fun initButtons(view: View) {
         progressBar = view.findViewById(R.id.progress_bar)
@@ -158,7 +166,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
 
             override fun onError(placement: String, error: BannerError) {
                 Log.v(BANNER_FRAGMENT_TAG, "onerror $placement , error :" + error.errorMessage)
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_ERROR + error.errorMessage)
+                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_ERROR + "- Error: " + error.errorMessage)
                 resetAnimation()
             }
 

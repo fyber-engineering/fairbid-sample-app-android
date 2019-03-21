@@ -41,7 +41,7 @@ private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 class RewardedFragment : Fragment(), MainFragment.LogsListener {
 
     companion object {
-        /** Rewarded's placement name */
+        /** Rewarded's placement name - configure at Fyber console*/
         private const val REWARDED_PLACEMENT_NAME = "Rewarded"
     }
 
@@ -50,16 +50,23 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
     private lateinit var showButton: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
+    private var fragmentView: View? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
-        initializeUiElements(view)
-        setListener()
-        if (Rewarded.isAvailable(REWARDED_PLACEMENT_NAME)) {
-            onAdAvailableAnimation()
+        if (fragmentView == null) {
+            fragmentView = inflater.inflate(R.layout.ad_container_fragment, container, false)
+            fragmentView?.let { it ->
+                initializeUiElements(it)
+                setListener()
+            }
         }
-        return view
+        return fragmentView
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LogsHelper.clearLog(recyclerView)
     }
 
     private fun initializeUiElements(view: View) {

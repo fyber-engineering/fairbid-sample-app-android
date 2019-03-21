@@ -110,7 +110,7 @@ class LogsHelper {
             notifyDataSetChanged()
         }
 
-        fun getCurrentTime(): String {
+        private fun getCurrentTime(): String {
             var answer: String
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val current = LocalDateTime.now()

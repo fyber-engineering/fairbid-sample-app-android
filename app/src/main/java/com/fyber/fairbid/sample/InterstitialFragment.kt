@@ -42,7 +42,7 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
 
     companion object {
-        /** Interstitial's placement name */
+        /** Interstitial's placement name - configure at Fyber console*/
         private const val INTERSTITIAL_PLACEMENT_NAME = "Interstitial"
     }
 
@@ -51,15 +51,22 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
     private lateinit var showButton: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
+    private var fragmentView: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
-        initializeUiElements(view)
-        setListener()
-        if (Interstitial.isAvailable(INTERSTITIAL_PLACEMENT_NAME)) {
-            onAdAvailableAnimation()
+        if (fragmentView == null) {
+            fragmentView = inflater.inflate(R.layout.ad_container_fragment, container, false)
+            fragmentView?.let { it ->
+                initializeUiElements(it)
+                setListener()
+            }
         }
-        return view
+        return fragmentView
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LogsHelper.clearLog(recyclerView)
     }
 
     private fun initializeUiElements(view: View) {
