@@ -116,7 +116,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
         Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
         val bannerOptions: BannerOptions = getBannerOptions()
         Banner.display(bannerPlacementName, bannerOptions, activity)
-        startRequestAnimiaon()
+        startRequestAnimation()
     }
 
     /**
@@ -149,7 +149,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
             override fun onLoad(placement: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onLoad $placement")
                 LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_LOAD)
-                onAdAvilabileAnimation()
+                onAdAvailableAnimation()
             }
 
             override fun onError(placement: String, error: BannerError) {
@@ -166,12 +166,12 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
         Banner.setBannerListener(bannerListener)
     }
 
-    private fun startRequestAnimiaon() {
+    private fun startRequestAnimation() {
         progressBar.visibility = View.VISIBLE
         destroyBannerButton.isEnabled = false
     }
 
-    private fun onAdAvilabileAnimation() {
+    private fun onAdAvailableAnimation() {
         destroyBannerButton.isEnabled = true
         progressBar.visibility = View.GONE
     }
