@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FairBid sample application</string>
+    <string name="app_name">FairBid Sample</string>
     <string name="sample_app">Sample App</string>
     <string name="fyber_fairbid">fyber fairbid </string>
     <string name="placement_id">Placement ID</string>
