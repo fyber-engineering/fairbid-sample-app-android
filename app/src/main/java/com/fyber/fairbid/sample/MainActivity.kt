@@ -30,7 +30,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 /**
  * The Main Activity,
- * responsible for starting the FairBid SDK and displaying the different examples -
+ * responsible for starting the FairBid SDK and displaying the different ads - banner, interstitial, rewarded
  */
 class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
 

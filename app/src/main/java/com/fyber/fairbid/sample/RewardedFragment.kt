@@ -28,20 +28,19 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.fyber.fairbid.ads.Rewarded
 import com.fyber.fairbid.ads.rewarded.RewardedListener
-import com.fyber.fairbid.utilities.LogsHelper
+import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 import com.fyber.fairbid.utilities.MainFragment
 
 private const val REWARDED_FRAGMENT_HEADER = "Rewarded"
 private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 
 /**
- * The Rewarded Fragment,
- * Responsible to demonstrate how to display rewarded ads
+ * Display rewarded ads
  */
 class RewardedFragment : Fragment(), MainFragment.LogsListener {
 
     companion object {
-        /** Rewarded's placement name - configure at Fyber console*/
+        /** Rewarded's placement name - as configured at Fyber console*/
         private const val REWARDED_PLACEMENT_NAME = "Rewarded"
     }
 
@@ -72,7 +71,7 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
 
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
-        LogsHelper.configureRecycler(recyclerView, activity!!, this)
+        OnScreenCallbacksHelper.configureRecycler(recyclerView, activity!!, this)
     }
 
     private fun initTextViews(view: View) {
@@ -100,9 +99,8 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
 
         cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
         cleanCallBacks.setOnClickListener {
-            cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_disabled)
             cleanCallBacks.isEnabled = false
-            LogsHelper.clearLog(recyclerView)
+            OnScreenCallbacksHelper.clearLog(recyclerView)
         }
         progressBar = view.findViewById(R.id.progress_bar)
     }
@@ -113,7 +111,7 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
      */
     private fun requestRewarded(rewardedPlacementName: String) {
         Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
-        /** Is interstitial Rewarded name is available */
+        /** request a new ad in case there is no available ad to show */
         if (!Rewarded.isAvailable(rewardedPlacementName)) {
             Rewarded.request(rewardedPlacementName)
             startRequestAnimation()
@@ -122,10 +120,11 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
 
     /**
      * Called when the showButton is clicked
+     * Calling the API method Rewarded.show in order to show the returned ad
      * @param rewardedPlacementName name of placement to be displayed
      */
     private fun showRewarded(rewardedPlacementName: String) {
-        Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
+        Log.v(REWARDED_FRAGMENT_TAG, "Showing RewardedVideo")
         Rewarded.show(rewardedPlacementName, activity)
         resetAnimation()
     }
@@ -137,49 +136,49 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
         val rewardedListener = object : RewardedListener {
             override fun onShow(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onShow $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_SHOW)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
             }
 
             override fun onClick(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onClick $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_CLICK)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_CLICK)
             }
 
             override fun onHide(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onHide $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_HIDE)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_HIDE)
             }
 
             override fun onShowFailure(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onShowFailure $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_SHOW_FAILURE)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
             }
 
             override fun onAvailable(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onAvailable $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AVALIABLE)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AVAILABLE)
                 onAdAvailableAnimation()
             }
 
             override fun onUnavailable(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onUnavailable $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_UNAVAILABLE)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_UNAVAILABLE)
                 resetAnimation()
             }
 
             override fun onAudioStart(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onAudioStart $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AUDTIO_START)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AUDIO_START)
             }
 
             override fun onAudioFinish(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onAudioFinish $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AUDIO_FINISH)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AUDIO_FINISH)
             }
 
             override fun onCompletion(placement: String, userRewarded: Boolean) {
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_COMPLETION)
-                Log.v(REWARDED_FRAGMENT_TAG, "onCompletion rewarded $placement")
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, if (userRewarded) "${OnScreenCallbacksHelper.ON_COMPLETION}" else "${OnScreenCallbacksHelper.ON_COMPLETION}: $userRewarded")
+                Log.v(REWARDED_FRAGMENT_TAG, "onCompletion rewarded status: $userRewarded, $placement")
             }
 
         }

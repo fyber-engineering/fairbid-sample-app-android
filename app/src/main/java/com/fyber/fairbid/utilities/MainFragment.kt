@@ -29,7 +29,7 @@ import com.fyber.fairbid.sample.R
 
 /**
  * Internal class for displaying the sample with multiple choices.
- * This fragment do not contain any sample code for FairBid
+ * This fragment does not contain any sample code for FairBid
  */
 class MainFragment : Fragment() {
 
@@ -46,12 +46,12 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.main_fragment, container, false)
-        initializeRecylerView(view)
+        initializeRecyclerView(view)
         initVersionTextView(view)
         return view
     }
 
-    private fun initializeRecylerView(view: View) {
+    private fun initializeRecyclerView(view: View) {
         recyclerView = view.findViewById(R.id.units_recycler)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -81,10 +81,10 @@ class MainFragment : Fragment() {
     }
 
 
-    class SeperatorViewHodler(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.item_seperator_row, parent, false))
+    class SeparatorViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
+        RecyclerView.ViewHolder(inflater.inflate(R.layout.item_separator_row, parent, false))
 
-    enum class RowType() { Row, Seperator }
+    enum class RowType() { Row, Separator }
     enum class UnitType() { Interstitial, Rewarded, Banner, TestSuite }
     data class UnitRowData(val unitText: String, val resourceImage: Int, val unitType: UnitType)
     data class Row(val type: RowType = RowType.Row, val payload: Any? = null)
@@ -111,7 +111,7 @@ class MainFragment : Fragment() {
                 UnitType.Rewarded
             )
         ),
-        Row(type = RowType.Seperator),
+        Row(type = RowType.Separator),
         Row(
             payload = UnitRowData(
                 "Test Suite",
@@ -130,7 +130,7 @@ class MainFragment : Fragment() {
             return if (viewType == RowType.Row.ordinal) {
                 UnitRowDataHolder(inflater, parent)
             } else {
-                SeperatorViewHodler(inflater, parent)
+                SeparatorViewHolder(inflater, parent)
             }
         }
 

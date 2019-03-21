@@ -30,16 +30,16 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class LogsHelper {
+class OnScreenCallbacksHelper {
     companion object {
         //Callbacks
         const val ON_SHOW = "onShow()"
         const val ON_CLICK = "onClick()"
         const val ON_HIDE = "onHide()"
         const val ON_SHOW_FAILURE = "onShowFailure()"
-        const val ON_AVALIABLE = "onAvailable()"
+        const val ON_AVAILABLE = "onAvailable()"
         const val ON_UNAVAILABLE = "onUnavailable()"
-        const val ON_AUDTIO_START = "onAudioStart()"
+        const val ON_AUDIO_START = "onAudioStart()"
         const val ON_AUDIO_FINISH = "onAudioFinish()"
         const val ON_COMPLETION = "onCompletion()"
         const val ON_ERROR = "onError()"

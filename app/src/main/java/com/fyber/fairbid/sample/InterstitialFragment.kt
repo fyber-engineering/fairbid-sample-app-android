@@ -28,21 +28,20 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.fyber.fairbid.ads.Interstitial
 import com.fyber.fairbid.ads.interstitial.InterstitialListener
-import com.fyber.fairbid.utilities.LogsHelper
+import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 import com.fyber.fairbid.utilities.MainFragment
 
 private const val INTERSTITIAL_FRAGMENT_HEADER = "Interstitial"
 private const val INTERSTITIAL_FRAGMENT_TAG = "InterstitialFragment"
 
 /**
- * The Interstitial Fragment,
- * Responsible to demonstrate how to display interstitial ads
+ * Display interstitial ads
  */
 class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
 
     companion object {
-        /** Interstitial's placement name - configure at Fyber console*/
+        /** Interstitial's placement name - as configured at Fyber console*/
         private const val INTERSTITIAL_PLACEMENT_NAME = "Interstitial"
     }
 
@@ -72,7 +71,7 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
-        LogsHelper.configureRecycler(recyclerView, activity!!, this)
+        OnScreenCallbacksHelper.configureRecycler(recyclerView, activity!!, this)
     }
 
     private fun initButtons(view: View) {
@@ -92,7 +91,7 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
         cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
         cleanCallBacks.setOnClickListener {
             cleanCallBacks.isEnabled = false
-            LogsHelper.clearLog(recyclerView)
+            OnScreenCallbacksHelper.clearLog(recyclerView)
         }
         progressBar = view.findViewById(R.id.progress_bar)
     }
@@ -108,11 +107,12 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
     /**
      * Called when the requestButton is clicked
+     * Calling the API method Interstitial.request in order to request an interstitial ad
      * @param interstitialPlacementName name of placement to be requested
      */
     private fun requestInterstitial(interstitialPlacementName: String) {
         Log.v(INTERSTITIAL_FRAGMENT_TAG, "Requesting Interstitial")
-        /** Is interstitial placement name is available */
+        /** request a new ad in case there is no available ad to show */
         if (!Interstitial.isAvailable(interstitialPlacementName)) {
             Interstitial.request(interstitialPlacementName)
             startRequestAnimation()
@@ -121,6 +121,7 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
     /**
      * Called when the showButton is clicked
+     * Calling the API method Interstitial.show in order to show the returned ad
      * @param interstitialPlacementName name of placement to be displayed
      */
     private fun showInterstitial(interstitialPlacementName: String) {
@@ -136,46 +137,46 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
         val interstitialListener = object : InterstitialListener {
             override fun onShow(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onShow $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_SHOW)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
             }
 
             override fun onClick(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onClick $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_CLICK)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_CLICK)
             }
 
             override fun onHide(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onHide $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_HIDE)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_HIDE)
 
             }
 
             override fun onShowFailure(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onShowFailure $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_SHOW_FAILURE)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
 
             }
 
             override fun onAvailable(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onAvailable $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AVALIABLE)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AVAILABLE)
                 onAdAvailableAnimation()
             }
 
             override fun onUnavailable(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onUnavailable $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_UNAVAILABLE)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_UNAVAILABLE)
                 resetAnimation()
             }
 
             override fun onAudioStart(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onAudioStart $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AUDTIO_START)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AUDIO_START)
             }
 
             override fun onAudioFinish(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onAudioFinish $placement")
-                LogsHelper.logAndToast(recyclerView, context, LogsHelper.ON_AUDIO_FINISH)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AUDIO_FINISH)
             }
         }
         Interstitial.setInterstitialListener(interstitialListener)
