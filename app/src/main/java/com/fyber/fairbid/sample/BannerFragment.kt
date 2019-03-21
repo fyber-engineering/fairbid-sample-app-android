@@ -52,6 +52,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
         val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
         initializeUiElements(view)
         setListener()
+        destroyBanner()
         return view
     }
 
@@ -99,7 +100,6 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
 
         cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
         cleanCallBacks.setOnClickListener {
-            cleanCallBacks.background = context!!.getDrawable(R.drawable.clean_callback_button_disabled)
             cleanCallBacks.isEnabled = false
             LogsHelper.clearLog(recyclerView)
         }

@@ -31,6 +31,9 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
         val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
         initializeUiElements(view)
         setListener()
+        if (Interstitial.isAvailable(INTERSTITIAL_PLACEMENT_NAME)) {
+            onAdAvilabileAnimation()
+        }
         return view
     }
 
@@ -160,5 +163,4 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
     override fun onFirstLogLine() {
         cleanCallBacks.isEnabled = true
     }
-
 }

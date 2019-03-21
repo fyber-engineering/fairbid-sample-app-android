@@ -33,6 +33,9 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
         val view: View = inflater.inflate(R.layout.ad_container_fragment, container, false)
         initializeUiElements(view)
         setListener()
+        if (Rewarded.isAvailable(REWARDED_PLACEMENT_NAME)) {
+            onAdAvilabileAnimation()
+        }
         return view
     }
 
