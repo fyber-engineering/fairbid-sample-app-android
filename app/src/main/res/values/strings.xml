@@ -9,4 +9,7 @@
     <string name="show_ad">Show Ad</string>
     <string name="destroy">Destroy</string>
     <string name="show">Show</string>
+    <string name="banner_header_name">Banner</string>
+    <string name="interstitial_header_name">Interstitial</string>
+    <string name="rewarded_header_name">Rewarded</string>
 </resources>

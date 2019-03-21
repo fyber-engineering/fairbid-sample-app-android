@@ -33,7 +33,6 @@ import com.fyber.fairbid.ads.banner.BannerOptions
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 import com.fyber.fairbid.utilities.MainFragment
 
-private const val BANNER_FRAGMENT_HEADER = "Banner"
 private const val BANNER_FRAGMENT_TAG = "BannerFragment"
 
 /**
@@ -83,7 +82,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
         val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
         placementName.text = BANNER_PLACEMENT_NAME
         val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
-        headerName.text = BANNER_FRAGMENT_HEADER
+        headerName.text = getString(R.string.banner_header_name)
         val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
         placementIcon.background = context!!.getDrawable(R.drawable.banner_icon)
     }

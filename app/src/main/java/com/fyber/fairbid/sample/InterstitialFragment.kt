@@ -31,7 +31,6 @@ import com.fyber.fairbid.ads.interstitial.InterstitialListener
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 import com.fyber.fairbid.utilities.MainFragment
 
-private const val INTERSTITIAL_FRAGMENT_HEADER = "Interstitial"
 private const val INTERSTITIAL_FRAGMENT_TAG = "InterstitialFragment"
 
 /**
@@ -100,7 +99,7 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
         val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
         placementName.text = INTERSTITIAL_PLACEMENT_NAME
         val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
-        headerName.text = INTERSTITIAL_FRAGMENT_HEADER
+        headerName.text = getString(R.string.interstitial_header_name)
         val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
         placementIcon.background = context!!.getDrawable(R.drawable.interstitial_icon)
     }

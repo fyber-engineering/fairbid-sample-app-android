@@ -31,7 +31,6 @@ import com.fyber.fairbid.ads.rewarded.RewardedListener
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 import com.fyber.fairbid.utilities.MainFragment
 
-private const val REWARDED_FRAGMENT_HEADER = "Rewarded"
 private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 
 /**
@@ -78,7 +77,7 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
         val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
         placementName.text = REWARDED_PLACEMENT_NAME
         val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
-        headerName.text = REWARDED_FRAGMENT_HEADER
+        headerName.text = getString(R.string.rewarded_header_name)
         val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
         placementIcon.background = context!!.getDrawable(R.drawable.rewarded_icon)
     }
