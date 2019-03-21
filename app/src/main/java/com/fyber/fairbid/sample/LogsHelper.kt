@@ -41,7 +41,9 @@ class LogsHelper {
         }
 
         fun logAndToast(recyclerView: RecyclerView, context: Context?, log: String) {
-            Toast.makeText(context, log, Toast.LENGTH_SHORT).show()
+            if(context != null) {
+                Toast.makeText(context, log, Toast.LENGTH_SHORT).show()
+            }
             val recyclerViewAdapter: LogsAdapter = recyclerView.adapter as LogsAdapter
             recyclerViewAdapter.addLog(log)
         }

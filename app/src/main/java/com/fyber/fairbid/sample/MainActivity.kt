@@ -16,6 +16,7 @@
 
 package com.fyber.fairbid.sample
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -30,10 +31,15 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
  * responsible for starting the FairBid SDK and displaying the different examples -
  *
  */
-//TODO add comment here publisher id
-private const val PUBLISHER_APP_ID = "109613"
-
 class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
+
+    companion object {
+        /**
+         * The app id provided through the Fyber console
+         */
+        private const val PUBLISHER_APP_ID = "109613"
+    }
+
 
     private val bannerFragment = BannerFragment()
     private val rewardedFragment = RewardedFragment()
@@ -51,13 +57,24 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         )
         setContentView(R.layout.activity_main)
         splashScreen()
-        startFairBidSdk()
+        startFairBidSdk(PUBLISHER_APP_ID)
     }
 
-    private fun startFairBidSdk() {
-        //TODO add comment start sdk
-        val fairBid = FairBid.configureForAppId(PUBLISHER_APP_ID).enableLogs()
+    /**
+     * Helper method for initializing the SDK with the given app id
+     * @param appId The app id provided through the Fyber console
+     */
+    private fun startFairBidSdk(appId: String) {
+        val fairBid = FairBid.configureForAppId(appId).enableLogs()
         fairBid.start(this)
+    }
+
+    /**
+     * Helper method for showing the test suite
+     * @param activity The activity provided by the publisher
+     */
+    private fun showTestSuite(activity: Activity) {
+        FairBid.showTestSuite(activity)
     }
 
     private fun splashScreen() {
@@ -90,8 +107,7 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
                     .addToBackStack(null).commit()
             }
             MainFragment.UnitType.TestSuite -> {
-                //TODO comment show test suite
-                FairBid.showTestSuite(this)
+                showTestSuite(this)
             }
         }
     }
