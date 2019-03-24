@@ -42,7 +42,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
 
     companion object {
         /** Banner's placement name - as configured at Fyber console*/
-        private const val BANNER_PLACEMENT_NAME = "Banner"
+        private const val BANNER_PLACEMENT_NAME = "BannerPlacementIdExample"
     }
 
     private lateinit var loadBannerButton: View

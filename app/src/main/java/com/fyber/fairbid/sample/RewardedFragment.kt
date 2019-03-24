@@ -40,7 +40,7 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
 
     companion object {
         /** Rewarded's placement name - as configured at Fyber console*/
-        private const val REWARDED_PLACEMENT_NAME = "Rewarded"
+        private const val REWARDED_PLACEMENT_NAME = "RewardedPlacementIdExample"
     }
 
     private lateinit var requestButton: View

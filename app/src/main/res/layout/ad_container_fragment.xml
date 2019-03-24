@@ -7,31 +7,34 @@
                 android:background="@color/white"
                 tools:context=".InterstitialFragment">
 
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/Lin1"
+                    android:paddingTop="10dp"
+                    android:background="@color/main_fragment_background"
+                    android:paddingBottom="11dp"
+    >
 
-    <TextView android:gravity="center"
-              android:background="@color/main_fragment_background"
-              android:id="@+id/fragment_header"
-              android:paddingTop="10dp"
-              android:paddingBottom="11dp"
-              android:layout_height="wrap_content"
-              android:layout_width="match_parent"
-              android:textSize="20sp"
-              android:lineSpacingMultiplier="1.29"
-              android:textColor="@color/purple_text"
-              tools:text="Interstital"/>
+        <ImageView android:layout_width="30dp" android:layout_height="30dp"
+                   android:id="@+id/back_button"
 
-    <ImageView android:layout_width="30dp" android:layout_height="30dp"
-               android:id="@+id/back_button"
-               android:layout_centerVertical="true"
-               android:layout_alignBottom="@id/fragment_header"
-               android:layout_marginBottom="11dp"
-               android:background="@drawable/ic_keyboard_arrow_left_black_24dp"/>
+                   android:background="@drawable/ic_keyboard_arrow_left_black_24dp"/>
+        <TextView
+                android:id="@+id/fragment_header"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="20sp"
+                android:lineSpacingMultiplier="1.29"
+                android:textColor="@color/purple_text"
+                android:gravity="center"
+                tools:text="Interstital"/>
+
+
+    </RelativeLayout>
 
 
     <View
             android:background="@color/gray_seperator_line"
             android:id="@+id/border_one"
-            android:layout_below="@id/fragment_header"
+            android:layout_below="@id/Lin1"
             android:layout_height="1dp"
             android:layout_width="match_parent"/>
 
@@ -63,11 +66,11 @@
 
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:layout_below="@id/placement_icon"
-                    android:gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
+                  android:layout_below="@id/placement_icon"
+                  android:gravity="center_horizontal"
+                  android:layout_marginTop="20dp"
                   android:padding="16dp"
-                    android:id="@+id/rel_layout1">
+                  android:id="@+id/rel_layout1">
 
         <include layout="@layout/button_with_progress"/>
 
@@ -89,11 +92,11 @@
 
     <!--Relevant only for BannerFragment-->
     <FrameLayout android:layout_width="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/rel_layout1"
-                    android:id="@+id/banner_container"
-                    android:layout_centerHorizontal="true"/>
+                 android:layout_marginTop="20dp"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@id/rel_layout1"
+                 android:id="@+id/banner_container"
+                 android:layout_centerHorizontal="true"/>
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:layout_marginStart="20dp"

@@ -41,7 +41,7 @@ class InterstitialFragment : Fragment(), MainFragment.LogsListener {
 
     companion object {
         /** Interstitial's placement name - as configured at Fyber console*/
-        private const val INTERSTITIAL_PLACEMENT_NAME = "Interstitial"
+        private const val INTERSTITIAL_PLACEMENT_NAME = "InterstitialPlacementIdExample"
     }
 
     private lateinit var cleanCallBacks: Button
