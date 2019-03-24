@@ -97,6 +97,7 @@ class BannerFragment : Fragment(), MainFragment.LogsListener {
             displayBanner(BANNER_PLACEMENT_NAME)
         }
         destroyBannerButton = view.findViewById(R.id.show_ad)
+        destroyBannerButton.background  = context!!.getDrawable(R.drawable.button_effect_banner)
         destroyBannerButton.text = getString(R.string.destroy)
         destroyBannerButton.setOnClickListener {
             destroyBanner(BANNER_PLACEMENT_NAME)

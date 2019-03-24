@@ -8,7 +8,7 @@
                 tools:context=".MainActivity">
 
 
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="140dp"
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="90dp"
                     android:paddingLeft="19dp"
                     android:id="@+id/rel_layout1"
                     android:background="@color/light_gray_background">

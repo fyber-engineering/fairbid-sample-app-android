@@ -11,7 +11,7 @@
     <TextView android:gravity="center"
               android:background="@color/main_fragment_background"
               android:id="@+id/fragment_header"
-              android:paddingTop="55dp"
+              android:paddingTop="10dp"
               android:paddingBottom="11dp"
               android:layout_height="wrap_content"
               android:layout_width="match_parent"
