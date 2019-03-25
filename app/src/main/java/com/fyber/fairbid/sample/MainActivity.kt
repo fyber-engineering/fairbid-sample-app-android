@@ -35,8 +35,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
 
     companion object {
-        /** The app id provided through the Fyber console*/
-        private const val PUBLISHER_APP_ID = "109613"
+        /**
+         * The app id provided through the Fyber console
+         * "109613" can be used a sample application.
+         * TODO replace with your own app id.
+         */
+        private const val PUBLISHERS_APP_ID = "109613"
     }
 
 
@@ -56,7 +60,7 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         )
         setContentView(R.layout.activity_main)
         splashScreen()
-        startFairBidSdk(PUBLISHER_APP_ID)
+        startFairBidSdk(PUBLISHERS_APP_ID)
     }
 
     /**
@@ -76,6 +80,9 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         FairBid.showTestSuite(activity)
     }
 
+    /**
+     * Shows the splash screen for 2000 millis
+     */
     private fun splashScreen() {
         supportFragmentManager.beginTransaction().add(R.id.fragment_container,
             SplashScreenFragment()
@@ -89,10 +96,16 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         }, 2000)
     }
 
+    /**
+     * Makes Calligraphy work
+     */
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
+    /**
+     * Invoked by the MainFragment, telling us which fragment to present.
+     */
     override fun onButtonClicked(unitType: MainFragment.UnitType) {
         when (unitType) {
             MainFragment.UnitType.Banner -> {

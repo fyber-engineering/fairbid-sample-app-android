@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2019. Fyber N.V
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
@@ -8,7 +24,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.fyber.fairbid.sample"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -46,9 +62,10 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
     //fairbid
-    implementation(name: 'fairbid-sdk-release', ext: 'aar')
-    implementation(name: 'ia-mraid-kit-release', ext: 'aar')
-    implementation(name: 'ia-native-kit-release', ext: 'aar')
-    implementation(name: 'ia-sdk-core-release', ext: 'aar')
-    implementation(name: 'ia-video-kit-release', ext: 'aar')
+    
+    implementation(name: 'fairbid-sdk-2.0.0', ext: 'aar')
+    implementation(name: 'ia-mraid-kit', ext: 'aar')
+    implementation(name: 'ia-native-kit', ext: 'aar')
+    implementation(name: 'ia-sdk-core', ext: 'aar')
+    implementation(name: 'ia-video-kit', ext: 'aar')
 }

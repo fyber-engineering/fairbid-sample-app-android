@@ -17,6 +17,7 @@ package com.fyber.fairbid.sample
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,15 +32,22 @@ import com.fyber.fairbid.ads.rewarded.RewardedListener
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 import com.fyber.fairbid.utilities.MainFragment
 
+/**
+ * Log tag
+ */
 private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 
 /**
- * Display rewarded ads
+ * A Fragment demonstrating how to request and display interstitial ads using the FairBid SDK.
  */
-class RewardedFragment : Fragment(), MainFragment.LogsListener {
+class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
 
     companion object {
-        /** Rewarded's placement name - as configured at Fyber console*/
+        /**
+         * The Rewarded's placement name - as configured at Fyber console
+         * "RewardedPlacementIdExample" can be used using the provided example APP_ID
+         * TODO change to your own configured placement.
+         */
         private const val REWARDED_PLACEMENT_NAME = "RewardedPlacementIdExample"
     }
 
@@ -62,50 +70,9 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
         return fragmentView
     }
 
-    private fun initializeUiElements(view: View) {
-        initLogRecycler(view)
-        initTextViews(view)
-        initButtons(view)
-    }
-
-    private fun initLogRecycler(view: View) {
-        recyclerView = view.findViewById(R.id.recycler_callbacks)
-        OnScreenCallbacksHelper.configureRecycler(recyclerView, activity!!, this)
-    }
-
-    private fun initTextViews(view: View) {
-        val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
-        placementName.text = REWARDED_PLACEMENT_NAME
-        val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
-        headerName.text = getString(R.string.rewarded_header_name)
-        val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
-        placementIcon.background = context!!.getDrawable(R.drawable.rewarded_icon)
-    }
-
-    private fun initButtons(view: View) {
-        requestButton = view.findViewById(R.id.text_progress_bar)
-        requestButton.setOnClickListener {
-            requestRewarded(REWARDED_PLACEMENT_NAME)
-        }
-        showButton = view.findViewById(R.id.show_ad)
-        showButton.setOnClickListener {
-            showRewarded(REWARDED_PLACEMENT_NAME)
-        }
-        val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
-        backButton.setOnClickListener {
-            activity!!.onBackPressed()
-        }
-
-        cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
-        cleanCallBacks.setOnClickListener {
-            cleanCallBacks.isEnabled = false
-            OnScreenCallbacksHelper.clearLog(recyclerView)
-        }
-        progressBar = view.findViewById(R.id.progress_bar)
-    }
-
     /**
      * Called when the requestButton is clicked
+     * This function provides an example for calling the API method Rewarded.rqueest in order to request a rewarded placement
      * @param rewardedPlacementName name of placement to be requested
      */
     private fun requestRewarded(rewardedPlacementName: String) {
@@ -119,7 +86,7 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
 
     /**
      * Called when the showButton is clicked
-     * Calling the API method Rewarded.show in order to show the returned ad
+     * This function provides an example for calling the API method Rewarded.show in order to show the ad received in the provided placement
      * @param rewardedPlacementName name of placement to be displayed
      */
     private fun showRewarded(rewardedPlacementName: String) {
@@ -129,7 +96,7 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
     }
 
     /**
-     * Listen to FairBid Rewarded Callbacks
+     * This function provides an example of Listening to FairBid BanRewardedner Callbacks and events.
      */
     private fun setListener() {
         val rewardedListener = object : RewardedListener {
@@ -184,21 +151,94 @@ class RewardedFragment : Fragment(), MainFragment.LogsListener {
         Rewarded.setRewardedListener(rewardedListener)
     }
 
+    /**
+     * Internal sample method. initialize the UI elements in this fragment.
+     * @param view the container view for this fragment
+     */
+    private fun initializeUiElements(view: View) {
+        initLogRecycler(view)
+        initTextViews(view)
+        initButtons(view)
+    }
+
+    /**
+     * Internal sample method. initialize the recycler view used to display callbacks and events.
+     * @param view the container view for this fragment
+     */
+    private fun initLogRecycler(view: View) {
+        recyclerView = view.findViewById(R.id.recycler_callbacks)
+        OnScreenCallbacksHelper.configureRecycler(recyclerView, activity!!, this)
+    }
+
+    /**
+     * Internal sample method. initialize the text views in this fragment
+     * @param view the container view for this fragment
+     */
+    private fun initTextViews(view: View) {
+        val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
+        placementName.text = REWARDED_PLACEMENT_NAME
+        val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
+        headerName.text = getString(R.string.rewarded_header_name)
+        val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
+        placementIcon.background = ContextCompat.getDrawable(context!!, R.drawable.rewarded_icon)
+    }
+
+    /**
+     * Internal sample method. initialize the buttons and click listeners in this fragment
+     * @param view the container view for this fragment
+     */
+    private fun initButtons(view: View) {
+        requestButton = view.findViewById(R.id.text_progress_bar)
+        requestButton.setOnClickListener {
+            requestRewarded(REWARDED_PLACEMENT_NAME)
+        }
+        showButton = view.findViewById(R.id.show_ad)
+        showButton.setOnClickListener {
+            showRewarded(REWARDED_PLACEMENT_NAME)
+        }
+        val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
+        backButton.setOnClickListener {
+            activity!!.onBackPressed()
+        }
+
+        cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
+        cleanCallBacks.setOnClickListener {
+            cleanCallBacks.isEnabled = false
+            OnScreenCallbacksHelper.clearLog(recyclerView)
+        }
+        progressBar = view.findViewById(R.id.progress_bar)
+    }
+
+    /**
+     * Internal sample method.
+     * Starts the request/loading animation
+     */
     private fun startRequestAnimation() {
         progressBar.visibility = View.VISIBLE
         showButton.isEnabled = false
     }
 
+    /**
+     * Internal sample method.
+     * Stops the request/loading animation and enables destroying the banner
+     */
     private fun onAdAvailableAnimation() {
         showButton.isEnabled = true
         progressBar.visibility = View.GONE
     }
 
+    /**
+     * Internal sample method.
+     * Resets the UI state for the progress animation / destroy button
+     */
     private fun resetAnimation() {
         progressBar.visibility = View.GONE
         showButton.isEnabled = false
     }
 
+    /**
+     * Invoked when the on-screen log became non-empty. used to enable/disable the clean button
+     */
     override fun onFirstLogLine() {
         cleanCallBacks.isEnabled = true
     }

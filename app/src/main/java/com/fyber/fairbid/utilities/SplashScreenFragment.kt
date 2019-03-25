@@ -26,7 +26,7 @@ import com.fyber.fairbid.sample.R
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass which Displays the Fyber logo and branding.
  */
 class SplashScreenFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

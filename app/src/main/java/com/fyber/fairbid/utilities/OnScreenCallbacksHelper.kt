@@ -30,7 +30,21 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+/**
+ * Utility helper, displays callback events on screen using a recycler view
+ */
 class OnScreenCallbacksHelper {
+
+    /**
+     * Interface for listeners which wants to be notified when the log is displaying something
+     */
+    interface LogsListener {
+        /**
+         * Invoked when the logs became non-empty
+         */
+        fun onFirstLogLine()
+    }
+
     companion object {
         //Callbacks
         const val ON_SHOW = "onShow()"
@@ -45,29 +59,47 @@ class OnScreenCallbacksHelper {
         const val ON_ERROR = "onError()"
         const val ON_LOAD = "onLoad()"
 
-        fun configureRecycler(recyclerView: RecyclerView, activity: Activity, listener: MainFragment.LogsListener) {
+        /**
+         * Configures the supplied recycler view to display supplied events.
+         * @param recyclerView The target recycler view
+         * @param activity the hosting activity for context
+         * @param listener a listener for callbacks
+         */
+        fun configureRecycler(recyclerView: RecyclerView, activity: Activity, listener: LogsListener) {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(activity)
                 val emptyLogRow = ArrayList<String>()
-                adapter = LogsAdapter(emptyLogRow)
-                (adapter as LogsAdapter).setListener(listener)
+                adapter = LogsAdapter(emptyLogRow, listener)
             }
         }
 
+        /**
+         * Adds the supplied log string to the recycler view and presents a toast.
+         * @param recyclerView The target recycler view
+         * @param context the hosting context
+         * @param log the relevant line to log
+         */
         fun logAndToast(recyclerView: RecyclerView, context: Context?, log: String) {
-            if(context != null) {
-                Toast.makeText(context, log, Toast.LENGTH_SHORT).show()
+            context?.let {
+                Toast.makeText(it, log, Toast.LENGTH_SHORT).show()
             }
             val recyclerViewAdapter: LogsAdapter = recyclerView.adapter as LogsAdapter
             recyclerViewAdapter.addLog(log)
         }
 
+        /**
+         * Clears the recycler view from any presented item
+         * @param recyclerView the target recycler view
+         */
         fun clearLog(recyclerView: RecyclerView) {
             val recyclerViewAdapter: LogsAdapter = recyclerView.adapter as LogsAdapter
             recyclerViewAdapter.clearList()
         }
     }
 
+    /**
+     * A view holder for log lines
+     */
     class LogDataHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.item_log_row, parent, false)) {
 
@@ -78,8 +110,10 @@ class OnScreenCallbacksHelper {
         }
     }
 
-    class LogsAdapter(private val logsList: ArrayList<String>) : RecyclerView.Adapter<LogDataHolder>() {
-        private lateinit var listener: MainFragment.LogsListener
+    /**
+     * An adapter for the log lines.
+     */
+    class LogsAdapter(private val logsList: ArrayList<String>, private var listener: LogsListener) : RecyclerView.Adapter<LogDataHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogDataHolder {
             val inflater = LayoutInflater.from(parent.context)
@@ -91,11 +125,6 @@ class OnScreenCallbacksHelper {
         }
 
         override fun getItemCount(): Int = logsList.size
-
-
-        fun setListener(listener: MainFragment.LogsListener) {
-            this.listener = listener
-        }
 
         fun addLog(log: String) {
             if (logsList.isEmpty()) {

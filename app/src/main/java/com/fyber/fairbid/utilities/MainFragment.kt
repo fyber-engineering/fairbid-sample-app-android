@@ -18,6 +18,7 @@ package com.fyber.fairbid.utilities
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -33,13 +34,17 @@ import com.fyber.fairbid.sample.R
  */
 class MainFragment : Fragment() {
 
+    /**
+     * interface for letting the activity know when the user has made some choice
+     */
     interface FragmentListener {
+        /**
+         * Called when the user has clicked some unit type.
+         * @param unitType The clicked unit type
+         */
         fun onButtonClicked(unitType: UnitType)
     }
 
-    interface LogsListener {
-        fun onFirstLogLine()
-    }
     private lateinit var recyclerView: RecyclerView
     private lateinit var fairBidVersionTextView: TextView
 
@@ -51,44 +56,80 @@ class MainFragment : Fragment() {
         return view
     }
 
+    /**
+     * Initializes the recycler view
+     * @param view the container view for this fragment
+     */
     private fun initializeRecyclerView(view: View) {
         recyclerView = view.findViewById(R.id.units_recycler)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = ListAdapter(mUnits)
+            adapter = ListAdapter(mUnits, if (context is FragmentListener) context as FragmentListener else null)
         }
     }
 
+    /**
+     * Initialize the version text view and set it with the proper text value
+     * @param view the container view for this fragment
+     */
     private fun initVersionTextView(view: View) {
         fairBidVersionTextView = view.findViewById(R.id.fairbid_version)
         fairBidVersionTextView.text = String.format("%s %s", fairBidVersionTextView.text, FairBid.SDK_VERSION)
     }
 
-    class UnitRowDataHolder(inflater: LayoutInflater, parent: ViewGroup) :
+    /**
+     * The view holder for rows/items in the recycler view
+     */
+    class UnitRowDataHolder(inflater: LayoutInflater, parent: ViewGroup, var mListener:FragmentListener?) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.item_unit_row, parent, false)) {
 
         private var unitIcon: ImageView = itemView.findViewById(R.id.row_unit_image)
         private var unitText: TextView = itemView.findViewById(R.id.row_text_unit)
         private var rightArrow: ImageView = itemView.findViewById(R.id.right_unit_arrow)
 
-        fun bind(unitRowData: UnitRowData, context: Context?) {
-            unitIcon.background = context!!.getDrawable(unitRowData.resourceImage)
+        fun bind(unitRowData: UnitRowData) {
+            unitIcon.background = ContextCompat.getDrawable(itemView.context, unitRowData.resourceImage);
             unitText.text = unitRowData.unitText
             rightArrow.setOnClickListener {
-                (context as FragmentListener).onButtonClicked(unitRowData.unitType)
+                mListener?.onButtonClicked(unitRowData.unitType)
             }
         }
     }
 
-
+    /**
+     * The view holder for separators/dividers
+     */
     class SeparatorViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.item_separator_row, parent, false))
 
+    /**
+     * Enum to help differentiate between items and separators
+     */
     enum class RowType() { Row, Separator }
+
+    /**
+     * Enum describing the possible choices in the sample application
+     */
     enum class UnitType() { Interstitial, Rewarded, Banner, TestSuite }
+
+    /**
+     * a model for the displayed items
+     * @param unitText the display name for this row
+     * @param resourceImage the image to display for this row
+     * @param unitType the corresponding {@link UnitType}
+     */
     data class UnitRowData(val unitText: String, val resourceImage: Int, val unitType: UnitType)
+
+    /**
+     * a model for the rows inside the recycler view
+     * @param rowType the Row Type
+     * @property payload the object describing this row, if any
+     */
     data class Row(val type: RowType = RowType.Row, val payload: Any? = null)
 
+    /**
+     * A simple list to contain the choices in the recycler view
+     */
     private val mUnits = listOf(
         Row(
             payload = UnitRowData(
@@ -121,14 +162,15 @@ class MainFragment : Fragment() {
         )
     )
 
-    class ListAdapter(private val list: List<Row>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        private var mContext: Context? = null
+    /**
+     * The adapter for recycler view
+     */
+    class ListAdapter(private val list: List<Row>, var mListener:FragmentListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            this.mContext = parent.context
             val inflater = LayoutInflater.from(parent.context)
             return if (viewType == RowType.Row.ordinal) {
-                UnitRowDataHolder(inflater, parent)
+                UnitRowDataHolder(inflater, parent, mListener)
             } else {
                 SeparatorViewHolder(inflater, parent)
             }
@@ -143,9 +185,9 @@ class MainFragment : Fragment() {
             if (getItemViewType(position) == RowType.Row.ordinal) {
 
                 val unitRowData: UnitRowData = list[position].payload as UnitRowData
-                (holder as UnitRowDataHolder).bind(unitRowData, mContext)
+                (holder as UnitRowDataHolder).bind(unitRowData)
                 holder.itemView.setOnClickListener {
-                    (mContext as FragmentListener).onButtonClicked((list[position].payload as UnitRowData).unitType)
+                    mListener?.onButtonClicked((list[position].payload as UnitRowData).unitType)
                 }
             }
         }
