@@ -13,7 +13,7 @@ This application demonstrates how to integrate Fyber's FairBid Mediation SDK usi
 * Requesting Rewarded Ads - [RewardedFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/RewardedFragment.kt)
 
 #### Support and documentation
-Please visit our [documentation](https://fyber-mediation.fyber.com/docs/ad-networks-tables)
+Please visit our [documentation](https://dev-android.fyber.com/docs)
 
 #### Project License
 
