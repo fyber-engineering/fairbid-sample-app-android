@@ -132,16 +132,6 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 resetAnimation()
             }
 
-            override fun onAudioStart(placement: String) {
-                Log.v(REWARDED_FRAGMENT_TAG, "onAudioStart $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AUDIO_START)
-            }
-
-            override fun onAudioFinish(placement: String) {
-                Log.v(REWARDED_FRAGMENT_TAG, "onAudioFinish $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AUDIO_FINISH)
-            }
-
             override fun onCompletion(placement: String, userRewarded: Boolean) {
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, if (userRewarded) "${OnScreenCallbacksHelper.ON_COMPLETION}" else "${OnScreenCallbacksHelper.ON_COMPLETION}: $userRewarded")
                 Log.v(REWARDED_FRAGMENT_TAG, "onCompletion rewarded status: $userRewarded, $placement")

@@ -51,7 +51,7 @@ allprojects {
 
 
 
-def fairBidVersion = "2.0.0"
+def fairBidVersion = "2.0.6"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

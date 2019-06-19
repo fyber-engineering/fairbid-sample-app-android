@@ -134,15 +134,6 @@ class InterstitialFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 resetAnimation()
             }
 
-            override fun onAudioStart(placement: String) {
-                Log.v(INTERSTITIAL_FRAGMENT_TAG, "onAudioStart $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AUDIO_START)
-            }
-
-            override fun onAudioFinish(placement: String) {
-                Log.v(INTERSTITIAL_FRAGMENT_TAG, "onAudioFinish $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AUDIO_FINISH)
-            }
         }
         Interstitial.setInterstitialListener(interstitialListener)
     }
