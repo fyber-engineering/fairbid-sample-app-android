@@ -49,7 +49,7 @@ class InterstitialFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
          * "InterstitialPlacementIdExample" can be used using the provided example APP_ID
          * TODO change to your own configured placement.
          */
-        private const val INTERSTITIAL_PLACEMENT_NAME = "InterstitialPlacementIdExample"
+        private const val INTERSTITIAL_PLACEMENT_NAME = "197405"
     }
 
     private lateinit var cleanCallBacks: Button

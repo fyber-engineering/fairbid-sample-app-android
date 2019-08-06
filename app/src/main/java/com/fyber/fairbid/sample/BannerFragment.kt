@@ -50,7 +50,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
          * "BannerPlacementIdExample" can be used using the provided example APP_ID
          * TODO change to your own configured placement.
          */
-        private const val BANNER_PLACEMENT_NAME = "BannerPlacementIdExample"
+        private const val BANNER_PLACEMENT_NAME = "197407"
     }
 
     private lateinit var loadBannerButton: View
