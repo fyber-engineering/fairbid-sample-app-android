@@ -80,7 +80,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
     private fun displayBanner(bannerPlacementName: String) {
         Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
         val bannerOptions: BannerOptions = generateBannerOptions()
-        Banner.display(bannerPlacementName, bannerOptions, activity)
+        Banner.show(bannerPlacementName, bannerOptions, activity)
         startRequestAnimation()
     }
 
