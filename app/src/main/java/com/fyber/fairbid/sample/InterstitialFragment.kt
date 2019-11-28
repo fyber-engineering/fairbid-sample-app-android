@@ -27,6 +27,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.fyber.fairbid.ads.ImpressionData
 import com.fyber.fairbid.ads.Interstitial
 import com.fyber.fairbid.ads.interstitial.InterstitialListener
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
@@ -100,10 +101,21 @@ class InterstitialFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
      */
     private fun setListener() {
         val interstitialListener = object : InterstitialListener {
-            override fun onShow(placement: String) {
+            override fun onShow(placement: String, impressionData: ImpressionData) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onShow $placement")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
             }
+
+            override fun onShowFailure(placement: String, impressionData: ImpressionData) {
+                Log.v(INTERSTITIAL_FRAGMENT_TAG, "onShowFailure $placement")
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
+            }
+
+            override fun onRequestStart(placement: String) {
+                Log.v(INTERSTITIAL_FRAGMENT_TAG, "onShowFailure $placement")
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
+            }
+
 
             override fun onClick(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onClick $placement")
@@ -116,11 +128,6 @@ class InterstitialFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
 
             }
 
-            override fun onShowFailure(placement: String) {
-                Log.v(INTERSTITIAL_FRAGMENT_TAG, "onShowFailure $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
-
-            }
 
             override fun onAvailable(placement: String) {
                 Log.v(INTERSTITIAL_FRAGMENT_TAG, "onAvailable $placement")

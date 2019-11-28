@@ -50,6 +50,7 @@ class OnScreenCallbacksHelper {
         const val ON_SHOW = "onShow()"
         const val ON_CLICK = "onClick()"
         const val ON_HIDE = "onHide()"
+        const val ON_REQUEST_START = "onRequestStart()"
         const val ON_SHOW_FAILURE = "onShowFailure()"
         const val ON_AVAILABLE = "onAvailable()"
         const val ON_UNAVAILABLE = "onUnavailable()"

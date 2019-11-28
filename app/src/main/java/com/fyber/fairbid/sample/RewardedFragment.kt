@@ -27,6 +27,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.fyber.fairbid.ads.ImpressionData
 import com.fyber.fairbid.ads.Rewarded
 import com.fyber.fairbid.ads.rewarded.RewardedListener
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
@@ -100,9 +101,19 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
      */
     private fun setListener() {
         val rewardedListener = object : RewardedListener {
-            override fun onShow(placement: String) {
+            override fun onShow(placement: String, impressionData: ImpressionData) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onShow $placement")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
+            }
+
+            override fun onShowFailure(placement: String, impressionData: ImpressionData) {
+                Log.v(REWARDED_FRAGMENT_TAG, "onShowFailure $placement")
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
+            }
+
+            override fun onRequestStart(placement: String) {
+                Log.v(REWARDED_FRAGMENT_TAG, "onShowFailure $placement")
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
             }
 
             override fun onClick(placement: String) {
@@ -113,11 +124,6 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
             override fun onHide(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onHide $placement")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_HIDE)
-            }
-
-            override fun onShowFailure(placement: String) {
-                Log.v(REWARDED_FRAGMENT_TAG, "onShowFailure $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
             }
 
             override fun onAvailable(placement: String) {
