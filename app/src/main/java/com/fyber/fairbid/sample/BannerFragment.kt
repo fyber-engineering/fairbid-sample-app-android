@@ -28,6 +28,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.fyber.fairbid.ads.Banner
+import com.fyber.fairbid.ads.ImpressionData
 import com.fyber.fairbid.ads.banner.BannerError
 import com.fyber.fairbid.ads.banner.BannerListener
 import com.fyber.fairbid.ads.banner.BannerOptions
@@ -108,6 +109,16 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
      */
     private fun setListener() {
         val bannerListener = object : BannerListener {
+            override fun onShow(placement: String, impressionData: ImpressionData) {
+                Log.v(BANNER_FRAGMENT_TAG, "onShow $placement")
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
+            }
+
+            override fun onRequestStart(placement: String) {
+                Log.v(BANNER_FRAGMENT_TAG, "onRequestStart $placement")
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
+            }
+
             override fun onClick(placement: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onClick $placement")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_CLICK)
@@ -125,10 +136,6 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 resetAnimation()
             }
 
-            override fun onShow(placement: String) {
-                Log.v(BANNER_FRAGMENT_TAG, "onShow $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
-            }
         }
         Banner.setBannerListener(bannerListener)
     }
