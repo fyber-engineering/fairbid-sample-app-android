@@ -1,27 +1,40 @@
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX files
+.DS_Store
+
+# Eclipse project files
 .classpath
 .project
-.settings/
-.metadata/
-.idea/
-.gradle/
+proguard/
+
+# Intellij project files
 *.iml
+*.ipr
 *.iws
-.DS_Store
-log/
-target/
+.idea/
+
+# other build/caching files
 build/
-atlassian*.xml
-log4j.properties
-buildNumber.properties
-local.properties
-log4j.xml
-context.xml
-iajs.st
-*.log
-*.diff
-logback-test.xml
-idea/misc.xml
-gradle/
-gradlew
-gradlew.bat
-app/libs
+.gradle/
+.navigation
+captures/
+output.json

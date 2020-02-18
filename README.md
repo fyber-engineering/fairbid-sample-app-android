@@ -4,7 +4,7 @@ This application demonstrates how to integrate Fyber's FairBid Mediation SDK usi
 
 #### Prerequisites
 * Minimum SDK 16 (Jelly Bean 4.1.x) 
-* Android build plugin 3.2.1 / Gradle 4.6 / Kotlin 1.2.71 
+* Android build plugin 3.4.2 / Gradle 5.4.1 / Kotlin 1.3.61 
 
 #### Navigating the sample code
 * SDK Initialization is located in the [MainActivity](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/MainActivity.kt)
@@ -17,7 +17,7 @@ Please visit our [documentation](https://dev-android.fyber.com/docs)
 
 #### Project License
 
-    Copyright (c) 2019. Fyber N.V
+    Copyright (c) 2020. Fyber N.V
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
