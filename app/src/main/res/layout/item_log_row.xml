@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent" android:layout_height="34dp">
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="34dp">
 
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:layout_marginTop="6dp"
-              android:id="@+id/row_log"
-              tools:text="log interstitial"
-              android:textSize="13sp"
-              android:textColor="@color/black"
-              android:layout_marginBottom="6dp"
-              android:layout_marginLeft="16dp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:id="@+id/row_log"
+            tools:text="log interstitial"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"/>
 
 
     <View
             android:layout_alignParentBottom="true"
             android:layout_alignLeft="@+id/row_log"
-            android:background="@color/gray_seperator_line"
+            android:background="@color/gray_separator_line"
             android:id="@+id/row_border"
-            android:layout_alignBottom="@id/rel_layout1"
             android:layout_height="1dp"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_alignStart="@+id/row_log"/>
 
 </RelativeLayout>

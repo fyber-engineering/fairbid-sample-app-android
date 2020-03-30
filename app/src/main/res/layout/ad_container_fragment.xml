@@ -34,7 +34,7 @@
 
 
     <View
-            android:background="@color/gray_seperator_line"
+            android:background="@color/gray_separator_line"
             android:id="@+id/border_one"
             android:layout_below="@id/Lin1"
             android:layout_height="1dp"
@@ -112,12 +112,12 @@
               android:layout_marginTop="15dp"
               android:id="@+id/callbacks_list_tv"
               android:layout_below="@id/banner_container"
-              android:text="@string/callbackks_list"
+              android:text="@string/callbacks_list"
     />
 
     <View
             android:layout_marginTop="11dp"
-            android:background="@color/gray_seperator_line"
+            android:background="@color/gray_separator_line"
             android:id="@+id/border_two"
             android:layout_below="@id/callbacks_list_tv"
             android:layout_height="1dp"

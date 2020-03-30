@@ -41,7 +41,7 @@
 
     <View
 
-            android:background="@color/gray_seperator_line"
+            android:background="@color/gray_separator_line"
             android:id="@+id/border_one"
             android:layout_alignBottom="@id/rel_layout1"
             android:layout_height="2dp"
