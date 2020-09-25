@@ -1,6 +1,8 @@
 Fyber's FairBid - Sample Android application
 ============================================
-This application demonstrates how to integrate Fyber's FairBid Mediation SDK using kotlin.
+This sample app demonstrates the FairBid SDK integration best practices. It is aligned with the FairBid developer documentation - developer.fyber.com, which we recommend you to read as well.
+
+Please note that when it comes to actually demonstrating the product "FairBid" as a monetization platform this sample app might fail due to the fact that ad delivery depends on factors like your country, your device your AAID/IDFA or any other kind of information that ad networks might have collected about you and that are taken into consideration when placing a bid to show an ad to you.
 
 #### Prerequisites
 * Minimum SDK 16 (Jelly Bean 4.1.x) 
