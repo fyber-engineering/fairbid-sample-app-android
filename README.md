@@ -10,9 +10,13 @@ Please note that when it comes to actually demonstrating the product "FairBid" a
 
 #### Navigating the sample code
 * SDK Initialization is located in the [MainActivity](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/MainActivity.kt)
+    * Appid is defined in line 43 of [MainActivity](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/MainActivity.kt)
 * Requesting Banner Ads - [BannerFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/BannerFragment.kt)
+    * Placement id for Banner Ads is defined in line 54 [BannerFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/BannerFragment.kt)
 * Requesting Interstitial Ads - [InterstitialFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/InterstitialFragment.kt)
+    * Placement id for Interstitial Ads is defined in line 53 of [InterstitialFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/InterstitialFragment.kt)
 * Requesting Rewarded Ads - [RewardedFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/RewardedFragment.kt)
+    * Placement id for Rewarded Ads is defined in line 52 of [RewardedFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/RewardedFragment.kt)
 
 #### Support and documentation
 Please visit our [documentation](https://dev-android.fyber.com/docs)
