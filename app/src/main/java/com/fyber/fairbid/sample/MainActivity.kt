@@ -20,7 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.fyber.FairBid
 import com.fyber.fairbid.utilities.MainFragment
 import com.fyber.fairbid.utilities.SplashScreenFragment
