@@ -27,6 +27,9 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        // necessary when including several mediated networks
+        multiDexEnabled true
+
     }
 
     buildTypes {
@@ -59,4 +62,8 @@ dependencies {
 
     //FairBid
     implementation "com.fyber:fairbid-sdk:$fairBidVersion"
+
+    // necessary when including several mediated networks
+    implementation 'androidx.multidex:multidex:2.0.1'
+
 }
