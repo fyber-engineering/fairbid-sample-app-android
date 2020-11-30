@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.fyber.FairBid
 import com.fyber.fairbid.utilities.MainFragment
@@ -87,7 +88,7 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.fragment_container,
             SplashScreenFragment()
         ).commit()
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             if (shouldSplashScreen) {
                 supportFragmentManager.beginTransaction().setCustomAnimations(R.anim.abc_fade_out, R.anim.abc_fade_out)
                     .replace(R.id.fragment_container, mainFragment).commitAllowingStateLoss()
