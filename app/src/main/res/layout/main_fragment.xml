@@ -48,7 +48,7 @@
             android:layout_width="match_parent"/>
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
             android:clickable="true"
             android:background="@color/white"
             android:layout_below="@id/rel_layout1"

@@ -18,12 +18,12 @@ package com.fyber.fairbid.utilities
 import android.app.Activity
 import android.content.Context
 import android.os.Build
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.fyber.fairbid.sample.R
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime

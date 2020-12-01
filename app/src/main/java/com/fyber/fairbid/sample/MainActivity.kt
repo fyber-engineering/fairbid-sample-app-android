@@ -17,15 +17,13 @@
 package com.fyber.fairbid.sample
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
+import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
 import com.fyber.FairBid
 import com.fyber.fairbid.utilities.MainFragment
 import com.fyber.fairbid.utilities.SplashScreenFragment
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
 /**
@@ -53,11 +51,6 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CalligraphyConfig.initDefault(
-            CalligraphyConfig.Builder().setDefaultFontPath("/fonts/Raleway-Regular.ttf").setFontAttrId(
-                R.attr.fontPath
-            ).build()
-        )
         setContentView(R.layout.activity_main)
         splashScreen()
         startFairBidSdk(PUBLISHERS_APP_ID)
@@ -87,20 +80,13 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.fragment_container,
             SplashScreenFragment()
         ).commit()
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             if (shouldSplashScreen) {
                 supportFragmentManager.beginTransaction().setCustomAnimations(R.anim.abc_fade_out, R.anim.abc_fade_out)
                     .replace(R.id.fragment_container, mainFragment).commitAllowingStateLoss()
                 shouldSplashScreen = false
             }
         }, 2000)
-    }
-
-    /**
-     * Makes Calligraphy work
-     */
-    override fun attachBaseContext(newBase: Context?) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
     /**
