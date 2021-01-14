@@ -46,7 +46,7 @@ android {
 }
 
 
-def fairBidVersion = "3.10.1"
+def fairBidVersion = "3.11.0"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
