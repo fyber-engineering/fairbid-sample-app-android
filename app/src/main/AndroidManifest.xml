@@ -6,7 +6,7 @@
 
     <!--    this is required when you want to both support devices under API 19 and still integrate Unity ads (which declares minimum API as 19)
     more information in FairBid's dev portal: https://developer.fyber.com/hc/en-us/articles/360010172138-Unity-Ads-->
-    <uses-sdk tools:overrideLibrary="com.unity3d.ads"/>
+    <uses-sdk tools:overrideLibrary="com.unity3d.ads, com.snap.adkit.distribution" />
     <application
             android:networkSecurityConfig="@xml/network_security_config"
             android:allowBackup="true"
