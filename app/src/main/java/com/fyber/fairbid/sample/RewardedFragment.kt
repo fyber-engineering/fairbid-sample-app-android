@@ -16,7 +16,6 @@
 package com.fyber.fairbid.sample
 
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,13 +24,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.fyber.fairbid.ads.ImpressionData
 import com.fyber.fairbid.ads.Rewarded
 import com.fyber.fairbid.ads.rewarded.RewardedListener
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
-import com.fyber.fairbid.utilities.MainFragment
 
 /**
  * Log tag
@@ -163,7 +162,7 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
      */
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
-        OnScreenCallbacksHelper.configureRecycler(recyclerView, activity!!, this)
+        OnScreenCallbacksHelper.configureRecycler(recyclerView, requireActivity(), this)
     }
 
     /**
@@ -176,7 +175,7 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
         headerName.text = getString(R.string.rewarded_header_name)
         val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
-        placementIcon.background = ContextCompat.getDrawable(context!!, R.drawable.rewarded_icon)
+        placementIcon.background = ContextCompat.getDrawable(requireContext(), R.drawable.rewarded_icon)
     }
 
     /**
@@ -194,7 +193,7 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         }
         val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
         backButton.setOnClickListener {
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         }
 
         cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button

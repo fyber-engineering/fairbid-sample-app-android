@@ -16,7 +16,6 @@
 package com.fyber.fairbid.sample
 
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +24,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.fyber.fairbid.ads.Banner
@@ -33,7 +33,6 @@ import com.fyber.fairbid.ads.banner.BannerError
 import com.fyber.fairbid.ads.banner.BannerListener
 import com.fyber.fairbid.ads.banner.BannerOptions
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
-import com.fyber.fairbid.utilities.MainFragment
 
 /**
  * Log tag
@@ -158,7 +157,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
      */
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
-        OnScreenCallbacksHelper.configureRecycler(recyclerView, activity!!, this)
+        OnScreenCallbacksHelper.configureRecycler(recyclerView, requireActivity(), this)
     }
 
     /**
@@ -171,7 +170,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
         headerName.text = getString(R.string.banner_header_name)
         val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
-        placementIcon.background = ContextCompat.getDrawable(context!!, R.drawable.banner_icon)
+        placementIcon.background = ContextCompat.getDrawable(requireContext(), R.drawable.banner_icon)
     }
 
     /**
@@ -188,14 +187,14 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
             displayBanner(BANNER_PLACEMENT_NAME)
         }
         destroyBannerButton = view.findViewById(R.id.show_ad)
-        destroyBannerButton.background  = ContextCompat.getDrawable(context!!, R.drawable.button_effect_banner)
+        destroyBannerButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.button_effect_banner)
         destroyBannerButton.text = getString(R.string.destroy)
         destroyBannerButton.setOnClickListener {
             destroyBanner(BANNER_PLACEMENT_NAME)
         }
-        val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
+        val backButton = view.findViewById(R.id.back_button) as ImageView
         backButton.setOnClickListener {
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         }
 
         cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
