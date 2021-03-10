@@ -27,7 +27,7 @@ allprojects {
             }
         }
         maven {
-            url "https://inneractive-assets.s3-eu-west-1.amazonaws.com/fairbid-sdk/android/maven"
+            url "s3://inneractive-assets/fairbid-sdk/android/maven/"
             content {
                 includeGroup("com.fyber")
             }
