@@ -15,6 +15,7 @@
 */
 package com.fyber.fairbid.sample
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -80,7 +81,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
     private fun displayBanner(bannerPlacementName: String) {
         Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
         val bannerOptions: BannerOptions = generateBannerOptions()
-        Banner.show(bannerPlacementName, bannerOptions, activity)
+        Banner.show(bannerPlacementName, bannerOptions, activity as Activity)
         startRequestAnimation()
     }
 
