@@ -138,7 +138,7 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
             }
 
             override fun onCompletion(placement: String, userRewarded: Boolean) {
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, if (userRewarded) "${OnScreenCallbacksHelper.ON_COMPLETION}" else "${OnScreenCallbacksHelper.ON_COMPLETION}: $userRewarded")
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, if (userRewarded) OnScreenCallbacksHelper.ON_COMPLETION else "${OnScreenCallbacksHelper.ON_COMPLETION}: $userRewarded")
                 Log.v(REWARDED_FRAGMENT_TAG, "onCompletion rewarded status: $userRewarded, $placement")
             }
 

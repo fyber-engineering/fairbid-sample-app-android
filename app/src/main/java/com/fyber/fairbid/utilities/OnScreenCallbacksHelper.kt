@@ -140,18 +140,14 @@ class OnScreenCallbacksHelper {
             notifyDataSetChanged()
         }
 
-        private fun getCurrentTime(): String {
-            var answer: String
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val current = LocalDateTime.now()
-                val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-                answer = current.format(formatter)
-            } else {
-                var date = Date();
-                val formatter = SimpleDateFormat("HH:mm:ss")
-                answer = formatter.format(date)
-            }
-            return answer
+        private fun getCurrentTime(): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val current = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+            current.format(formatter)
+        } else {
+            val date = Date();
+            val formatter = SimpleDateFormat("HH:mm:ss")
+            formatter.format(date)
         }
     }
 }

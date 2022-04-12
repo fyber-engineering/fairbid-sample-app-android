@@ -77,7 +77,8 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
      * Shows the splash screen for 2000 millis
      */
     private fun splashScreen() {
-        supportFragmentManager.beginTransaction().add(R.id.fragment_container,
+        supportFragmentManager.beginTransaction().add(
+            R.id.fragment_container,
             SplashScreenFragment()
         ).commit()
         Handler(Looper.getMainLooper()).postDelayed({

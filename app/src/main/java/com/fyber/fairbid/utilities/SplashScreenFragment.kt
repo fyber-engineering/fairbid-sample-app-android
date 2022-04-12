@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment
 import com.fyber.FairBid
 import com.fyber.fairbid.sample.R
 
-
 /**
  * A simple {@link Fragment} subclass which Displays the Fyber logo and branding.
  */
