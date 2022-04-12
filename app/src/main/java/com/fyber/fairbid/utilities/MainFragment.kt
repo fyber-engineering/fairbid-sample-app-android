@@ -15,7 +15,6 @@
  */
 package com.fyber.fairbid.utilities
 
-import android.content.Context
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
@@ -49,7 +48,7 @@ class MainFragment : Fragment() {
     private lateinit var fairBidVersionTextView: TextView
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View = inflater.inflate(R.layout.main_fragment, container, false)
         initializeRecyclerView(view)
         initVersionTextView(view)
@@ -80,7 +79,7 @@ class MainFragment : Fragment() {
     /**
      * The view holder for rows/items in the recycler view
      */
-    class UnitRowDataHolder(inflater: LayoutInflater, parent: ViewGroup, var mListener:FragmentListener?) :
+    class UnitRowDataHolder(inflater: LayoutInflater, parent: ViewGroup, var mListener: FragmentListener?) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.item_unit_row, parent, false)) {
 
         private var unitIcon: ImageView = itemView.findViewById(R.id.row_unit_image)
@@ -88,7 +87,7 @@ class MainFragment : Fragment() {
         private var rightArrow: ImageView = itemView.findViewById(R.id.right_unit_arrow)
 
         fun bind(unitRowData: UnitRowData) {
-            unitIcon.background = ContextCompat.getDrawable(itemView.context, unitRowData.resourceImage);
+            unitIcon.background = ContextCompat.getDrawable(itemView.context, unitRowData.resourceImage)
             unitText.text = unitRowData.unitText
             rightArrow.setOnClickListener {
                 mListener?.onButtonClicked(unitRowData.unitType)
@@ -122,7 +121,7 @@ class MainFragment : Fragment() {
 
     /**
      * a model for the rows inside the recycler view
-     * @param rowType the Row Type
+     * @param type the Row Type
      * @property payload the object describing this row, if any
      */
     data class Row(val type: RowType = RowType.Row, val payload: Any? = null)
@@ -165,7 +164,7 @@ class MainFragment : Fragment() {
     /**
      * The adapter for recycler view
      */
-    class ListAdapter(private val list: List<Row>, var mListener:FragmentListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    class ListAdapter(private val list: List<Row>, var mListener: FragmentListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             val inflater = LayoutInflater.from(parent.context)
