@@ -22,6 +22,7 @@ plugins {
 
 android {
     compileSdkVersion 33
+    namespace 'com.fyber.fairbid.sample'
 
     defaultConfig {
         applicationId "com.fyber.fairbid.sample"
@@ -55,11 +56,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
 
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'androidx.fragment:fragment-ktx:1.5.0'
+    implementation 'androidx.fragment:fragment-ktx:1.5.2'
 
     // necessary when including several mediated networks
     implementation 'androidx.multidex:multidex:2.0.1'
