@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.fyber.fairbid.sample">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--    this is required when you want to both support devices under API 19 and still integrate Unity ads (which declares minimum API as 19)
     more information in FairBid's dev portal: https://developer.fyber.com/hc/en-us/articles/360010172138-Unity-Ads-->
