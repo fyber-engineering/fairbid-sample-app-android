@@ -11,4 +11,6 @@
     <color name="gray_separator_line">#C3C3C3</color>
     <color name="purple_text">#1D0047</color>
     <color name="disabled_button">#C5D0DE</color>
+
+    <color name="splashscreen_background">#fff</color>
 </resources>
