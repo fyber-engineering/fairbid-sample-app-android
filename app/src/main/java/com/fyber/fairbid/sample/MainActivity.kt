@@ -23,6 +23,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.fyber.FairBid
 import com.fyber.fairbid.utilities.MainFragment
+import com.fyber.fairbid.utilities.MainFragment.UnitType
 import com.fyber.fairbid.utilities.SplashScreenFragment
 
 
@@ -42,7 +43,8 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
     }
 
 
-    private val bannerFragment = BannerFragment()
+    private val bannerFragment = BannerFragment.createInstance(UnitType.Banner)
+    private val mrecFragment = BannerFragment.createInstance(UnitType.Mrec)
     private val rewardedFragment = RewardedFragment()
     private val interstitialFragment = InterstitialFragment()
     private val mainFragment = MainFragment()
@@ -93,21 +95,25 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
     /**
      * Invoked by the MainFragment, telling us which fragment to present.
      */
-    override fun onButtonClicked(unitType: MainFragment.UnitType) {
+    override fun onButtonClicked(unitType: UnitType) {
         when (unitType) {
-            MainFragment.UnitType.Banner -> {
+            UnitType.Banner -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bannerFragment)
                     .addToBackStack(null).commit()
             }
-            MainFragment.UnitType.Rewarded -> {
+            UnitType.Mrec -> {
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, mrecFragment)
+                    .addToBackStack(null).commit()
+            }
+            UnitType.Rewarded -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, rewardedFragment)
                     .addToBackStack(null).commit()
             }
-            MainFragment.UnitType.Interstitial -> {
+            UnitType.Interstitial -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, interstitialFragment)
                     .addToBackStack(null).commit()
             }
-            MainFragment.UnitType.TestSuite -> {
+            UnitType.TestSuite -> {
                 showTestSuite(this)
             }
         }

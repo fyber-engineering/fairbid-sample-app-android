@@ -33,6 +33,8 @@ import com.fyber.fairbid.ads.ImpressionData
 import com.fyber.fairbid.ads.banner.BannerError
 import com.fyber.fairbid.ads.banner.BannerListener
 import com.fyber.fairbid.ads.banner.BannerOptions
+import com.fyber.fairbid.ads.banner.BannerSize
+import com.fyber.fairbid.utilities.MainFragment
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 
 /**
@@ -51,7 +53,31 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
          * "BannerPlacementIdExample" can be used using the provided example APP_ID
          * TODO change to your own configured placement.
          */
-        private const val BANNER_PLACEMENT_NAME = "197407"
+        private const val PLACEMENT_KEY = "PLACEMENT"
+        private const val IS_MREC_KEY = "IS_MREC"
+
+
+        fun createInstance(bannerType: MainFragment.UnitType): BannerFragment {
+            val BANNER_PLACEMENT_NAME = "197407"
+            val MREC_PLACEMENT_NAME = "936586"
+
+            val arguments = Bundle().apply {
+                when (bannerType) {
+                    MainFragment.UnitType.Banner -> {
+                        putString(PLACEMENT_KEY, BANNER_PLACEMENT_NAME)
+                        putBoolean(IS_MREC_KEY, false)
+                    }
+                    MainFragment.UnitType.Mrec -> {
+                        putString(PLACEMENT_KEY, MREC_PLACEMENT_NAME)
+                        putBoolean(IS_MREC_KEY, true)
+                    }
+                    else -> throw IllegalArgumentException("Unsupported banner type: $bannerType")
+                }
+            }
+            return BannerFragment().also {
+                it.arguments = arguments
+            }
+        }
     }
 
     private lateinit var loadBannerButton: View
@@ -59,10 +85,18 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
     private lateinit var destroyBannerButton: Button
     private lateinit var bannerContainer: ViewGroup
     private lateinit var recyclerView: RecyclerView
+    private lateinit var placementIcon: ImageView
     private lateinit var progressBar: ProgressBar
     private var fragmentView: View? = null
 
+    private lateinit var bannerPlacementId: String
+    private lateinit var bannerSize: BannerSize
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        bannerPlacementId = requireArguments().getString(PLACEMENT_KEY, "")
+        bannerSize = requireArguments().getBoolean(IS_MREC_KEY)
+            .let { isMrec -> if (isMrec) BannerSize.MREC else BannerSize.SMART }
+
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.ad_container_fragment, container, false)
             fragmentView?.let { it ->
@@ -90,7 +124,10 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
      */
     private fun generateBannerOptions(): BannerOptions {
         //Calling the API method BannerOptions().placeInContainer in order to set banner position in the desired view group
-        return BannerOptions().placeInContainer(bannerContainer)
+
+        return BannerOptions()
+            .placeInContainer(bannerContainer)
+            .withSize(bannerSize)
     }
 
     /**
@@ -148,6 +185,11 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         initLogRecycler(view)
         initTextViews(view)
         initButtons(view)
+        placementIcon = view.findViewById(R.id.placement_icon)
+        when (bannerSize) {
+            BannerSize.SMART -> R.drawable.fb_ic_banner
+            BannerSize.MREC -> R.drawable.fb_ic_mrec
+        }.let { placementIcon.setImageResource(it) }
         bannerContainer = view.findViewById(R.id.banner_container)
         bannerContainer.visibility = View.VISIBLE
     }
@@ -167,7 +209,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
      */
     private fun initTextViews(view: View) {
         val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
-        placementName.text = BANNER_PLACEMENT_NAME
+        placementName.text = bannerPlacementId
         val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
         headerName.text = getString(R.string.banner_header_name)
         val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
@@ -185,13 +227,13 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         loadBannerButton = view.findViewById(R.id.text_progress_bar)
 
         loadBannerButton.setOnClickListener {
-            displayBanner(BANNER_PLACEMENT_NAME)
+            displayBanner(bannerPlacementId)
         }
         destroyBannerButton = view.findViewById(R.id.show_ad)
         destroyBannerButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.button_effect_banner)
         destroyBannerButton.text = getString(R.string.destroy)
         destroyBannerButton.setOnClickListener {
-            destroyBanner(BANNER_PLACEMENT_NAME)
+            destroyBanner(bannerPlacementId)
         }
         val backButton = view.findViewById(R.id.back_button) as ImageView
         backButton.setOnClickListener {
