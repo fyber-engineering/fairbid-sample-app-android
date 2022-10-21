@@ -171,7 +171,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
         headerName.text = getString(R.string.banner_header_name)
         val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
-        placementIcon.background = ContextCompat.getDrawable(requireContext(), R.drawable.banner_icon)
+        placementIcon.background = ContextCompat.getDrawable(requireContext(), R.drawable.fb_ic_banner)
     }
 
     /**

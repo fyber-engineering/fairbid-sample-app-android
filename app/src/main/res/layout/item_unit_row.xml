@@ -7,14 +7,14 @@
         android:layout_height="85dp">
 
     <ImageView
-            android:id="@+id/row_unit_image"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
-            android:contentDescription="icon"
-            android:layout_marginStart="16dp"/>
+        android:id="@+id/row_unit_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:contentDescription="icon" />
 
 
     <TextView
