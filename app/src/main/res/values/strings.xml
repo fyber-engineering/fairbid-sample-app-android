@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">FairBid Sample</string>
-    <string name="sample_app">Sample App</string>
-    <string name="fyber_fairbid">fyber fairbid </string>
+    <string name="app_name">DT FairBid Sample</string>
+    <string name="sample_app">DT FairBid Sample App</string>
+    <string name="dt_fairbid">DT FairBid </string>
     <string name="placement_id">Placement ID</string>
     <string name="callbacks_list">CALLBACKS LIST</string>
     <string name="clean_callbacks_list">Clean Callbacks list</string>

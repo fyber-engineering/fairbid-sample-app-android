@@ -199,7 +199,7 @@ class InterstitialFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
         headerName.text = getString(R.string.interstitial_header_name)
         val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
-        placementIcon.background = ContextCompat.getDrawable(requireContext(), R.drawable.interstitial_icon)
+        placementIcon.background = ContextCompat.getDrawable(requireContext(), R.drawable.fb_ic_interstitial)
     }
 
     /**

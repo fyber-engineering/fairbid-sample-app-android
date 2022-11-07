@@ -133,21 +133,21 @@ class MainFragment : Fragment() {
         Row(
             payload = UnitRowData(
                 "Banner",
-                R.drawable.banner_icon,
+                R.drawable.fb_ic_banner,
                 UnitType.Banner
             )
         ),
         Row(
             payload = UnitRowData(
                 "Interstitial",
-                R.drawable.interstitial_icon,
+                R.drawable.fb_ic_interstitial,
                 UnitType.Interstitial
             )
         ),
         Row(
             payload = UnitRowData(
                 "Rewarded",
-                R.drawable.rewarded_icon,
+                R.drawable.fb_ic_rewarded,
                 UnitType.Rewarded
             )
         ),
@@ -155,7 +155,7 @@ class MainFragment : Fragment() {
         Row(
             payload = UnitRowData(
                 "Test Suite",
-                R.drawable.ic_test_suite,
+                R.drawable.fb_ic_test_suite,
                 UnitType.TestSuite
             )
         )

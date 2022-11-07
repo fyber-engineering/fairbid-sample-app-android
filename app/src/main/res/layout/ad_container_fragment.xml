@@ -41,13 +41,15 @@
             android:layout_width="match_parent"/>
 
 
-    <ImageView android:layout_width="40dp" android:layout_height="50dp" android:layout_below="@id/border_one"
-               android:layout_marginLeft="20dp"
-               android:layout_alignParentLeft="true"
-               android:layout_marginTop="26dp"
-               android:id="@+id/placement_icon"
-               android:layout_marginRight="5dp"
-    />
+    <ImageView
+        android:id="@+id/placement_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/border_one"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginRight="5dp" />
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:text="@string/placement_id"

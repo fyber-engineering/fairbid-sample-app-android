@@ -32,7 +32,7 @@
                 android:textStyle="bold"
                 android:lineSpacingMultiplier="1.38"
                 android:textAllCaps="true"
-                android:text="@string/fyber_fairbid"
+                android:text="@string/dt_fairbid"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="13dp"
                 android:width="136dp"/>

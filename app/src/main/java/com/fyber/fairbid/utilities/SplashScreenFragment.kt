@@ -31,7 +31,7 @@ class SplashScreenFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.splash_screen_fragment, container, false)
         val sdkVersion: TextView = view.findViewById(R.id.sdk_version)
-        sdkVersion.text = getString(R.string.fyber_fairbid) + " " + FairBid.SDK_VERSION
+        sdkVersion.text = getString(R.string.dt_fairbid) + " " + FairBid.SDK_VERSION
         return view
     }
 }
