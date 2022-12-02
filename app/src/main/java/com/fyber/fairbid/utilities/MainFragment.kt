@@ -16,11 +16,11 @@
 package com.fyber.fairbid.utilities
 
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -104,12 +104,12 @@ class MainFragment : Fragment() {
     /**
      * Enum to help differentiate between items and separators
      */
-    enum class RowType() { Row, Separator }
+    enum class RowType { Row, Separator }
 
     /**
      * Enum describing the possible choices in the sample application
      */
-    enum class UnitType() { Interstitial, Rewarded, Banner, TestSuite }
+    enum class UnitType { Interstitial, Rewarded, Banner, Mrec, TestSuite }
 
     /**
      * a model for the displayed items
@@ -135,6 +135,13 @@ class MainFragment : Fragment() {
                 "Banner",
                 R.drawable.fb_ic_banner,
                 UnitType.Banner
+            )
+        ),
+        Row(
+            payload = UnitRowData(
+                "MREC Banner",
+                R.drawable.fb_ic_mrec,
+                UnitType.Mrec
             )
         ),
         Row(
