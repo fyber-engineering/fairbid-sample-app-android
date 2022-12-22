@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/purple_button"
-        android:layout_weight="0.5"
-        android:gravity="center"
-        android:layout_alignParentLeft="true"
-        android:id="@+id/text_progress_bar"
-        android:layout_alignParentStart="true"
-        tools:showIn="@layout/ad_container_fragment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/text_progress_bar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentLeft="true"
+    android:layout_weight="0.5"
+    android:background="@drawable/purple_button"
+    android:gravity="center"
+    tools:showIn="@layout/ad_container_fragment">
 
     <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginRight="12dp"
-            android:visibility="gone"
-            android:indeterminateTint="@color/white"
-            android:layout_marginEnd="12dp"/>
+        android:id="@+id/progress_bar"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:indeterminateTint="@color/white"
+        android:visibility="gone" />
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              android:id="@+id/request_ad"
-              android:text="@string/request_ad"
-              android:gravity="center_vertical"
-              android:textAllCaps="false"
-              android:textColor="@color/white"/>
+    <TextView
+        android:id="@+id/request_ad"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="@string/request_ad"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
 
 </LinearLayout>
