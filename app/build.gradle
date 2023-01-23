@@ -47,6 +47,10 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
@@ -54,9 +58,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.21"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.0"
 
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'

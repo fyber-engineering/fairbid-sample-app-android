@@ -9,13 +9,13 @@
     tools:context=".MainActivity"
     tools:ignore="MissingPrefix">
 
-
     <RelativeLayout
         android:id="@+id/rel_layout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/light_gray_background"
-        android:paddingStart="20dp">
+        android:paddingStart="20dp"
+        android:paddingLeft="20dp">
 
         <TextView
             android:id="@+id/sample_app_header"
