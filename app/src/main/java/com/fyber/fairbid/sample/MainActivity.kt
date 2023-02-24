@@ -21,6 +21,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.chartboost.sdk.Chartboost
+import com.chartboost.sdk.LoggingLevel
 import com.fyber.FairBid
 import com.fyber.fairbid.utilities.MainFragment
 import com.fyber.fairbid.utilities.MainFragment.UnitType
@@ -39,7 +41,7 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
          * "109613" can be used a sample application.
          * TODO replace with your own app id.
          */
-        private const val PUBLISHERS_APP_ID = "109613"
+        private const val PUBLISHERS_APP_ID = "110073"
     }
 
 
@@ -55,6 +57,7 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         splashScreen()
+        Chartboost.setLoggingLevel(LoggingLevel.ALL)
         startFairBidSdk(PUBLISHERS_APP_ID)
     }
 

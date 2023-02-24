@@ -25,7 +25,7 @@ android {
     namespace 'com.fyber.fairbid.sample'
 
     defaultConfig {
-        applicationId "com.fyber.fairbid.sample"
+        applicationId "com.fyber.fairbid.testapp.debug"
         minSdkVersion 16
         targetSdkVersion 33
         versionCode 1
@@ -65,6 +65,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.fragment:fragment-ktx:1.5.5'
+
+    implementation 'com.chartboost:chartboost-sdk:9.1.1'
 
     // necessary when including several mediated networks
     implementation 'androidx.multidex:multidex:2.0.1'
