@@ -78,10 +78,12 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
     private fun requestRewarded(rewardedPlacementName: String) {
         Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
         /** request a new ad in case there is no available ad to show */
-        if (!Rewarded.isAvailable(rewardedPlacementName)) {
+//        if (!
+//            Rewarded.isAvailable(rewardedPlacementName)
+//        ) {
             Rewarded.request(rewardedPlacementName)
-            startRequestAnimation()
-        }
+//            startRequestAnimation()
+//        }
     }
 
     /**
@@ -111,7 +113,7 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
             }
 
             override fun onRequestStart(placement: String) {
-                Log.v(REWARDED_FRAGMENT_TAG, "onShowFailure $placement")
+                Log.v(REWARDED_FRAGMENT_TAG, "onRequestStart $placement")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
             }
 
