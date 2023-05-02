@@ -167,9 +167,9 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 onAdAvailableAnimation()
             }
 
-            override fun onError(placement: String, error: BannerError) {
-                Log.v(BANNER_FRAGMENT_TAG, "onError $placement, error:" + error.errorMessage)
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_ERROR + ": " + error.errorMessage)
+            override fun onError(placement: String, error: BannerError?) {
+                Log.v(BANNER_FRAGMENT_TAG, "onError $placement, error:" + error?.errorMessage)
+                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_ERROR + ": " + error?.errorMessage)
                 resetAnimation()
             }
 
