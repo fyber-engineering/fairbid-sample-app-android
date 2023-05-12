@@ -17,14 +17,21 @@
 package com.fyber.fairbid.sample
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.fyber.FairBid
+import com.fyber.Fyber
+import com.fyber.ads.AdFormat
+import com.fyber.fairbid.internal.Logger
 import com.fyber.fairbid.utilities.MainFragment
 import com.fyber.fairbid.utilities.MainFragment.UnitType
 import com.fyber.fairbid.utilities.SplashScreenFragment
+import com.fyber.requesters.OfferWallRequester
+import com.fyber.requesters.RequestCallback
+import com.fyber.requesters.RequestError
 
 
 /**
@@ -65,6 +72,26 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
     private fun startFairBidSdk(appId: String) {
         val fairBid = FairBid.configureForAppId(appId).enableLogs()
         fairBid.start(this)
+
+        Fyber.with("1246", this)
+            .withSecurityToken("12345678")
+            .start()
+        val requestCallback: RequestCallback = object : RequestCallback {
+            override fun onRequestError(p0: RequestError?) {
+                Logger.error("RequestCallback - onRequestError")
+            }
+
+            override fun onAdAvailable(p0: Intent) {
+                Logger.error("RequestCallback - onAdAvailable")
+                startActivity(p0)
+            }
+
+            override fun onAdNotAvailable(p0: AdFormat?) {
+                Logger.error("RequestCallback - onAdNotAvailable")
+            }
+        }
+        OfferWallRequester.create(requestCallback)
+            .request(this)
     }
 
     /**
@@ -85,7 +112,8 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         ).commit()
         Handler(Looper.getMainLooper()).postDelayed({
             if (shouldSplashScreen) {
-                supportFragmentManager.beginTransaction().setCustomAnimations(R.anim.abc_fade_out, R.anim.abc_fade_out)
+                supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.abc_fade_out, R.anim.abc_fade_out)
                     .replace(R.id.fragment_container, mainFragment).commitAllowingStateLoss()
                 shouldSplashScreen = false
             }
@@ -98,21 +126,29 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
     override fun onButtonClicked(unitType: UnitType) {
         when (unitType) {
             UnitType.Banner -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bannerFragment)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, bannerFragment)
                     .addToBackStack(null).commit()
             }
+
             UnitType.Mrec -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, mrecFragment)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, mrecFragment)
                     .addToBackStack(null).commit()
             }
+
             UnitType.Rewarded -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, rewardedFragment)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, rewardedFragment)
                     .addToBackStack(null).commit()
             }
+
             UnitType.Interstitial -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, interstitialFragment)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, interstitialFragment)
                     .addToBackStack(null).commit()
             }
+
             UnitType.TestSuite -> {
                 showTestSuite(this)
             }

@@ -1,10 +1,11 @@
 pluginManagement {
     repositories {
+        mavenLocal()
         mavenCentral()
         google()
     }
     plugins {
-        id 'com.fyber.fairbid-sdk-plugin' version '3.38.0'
+        id 'com.fyber.fairbid-sdk-plugin' version '3.99.0'
         id 'com.android.application'
         id 'kotlin-android'
     }
