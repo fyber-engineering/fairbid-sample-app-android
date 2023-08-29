@@ -85,7 +85,7 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         ).commit()
         Handler(Looper.getMainLooper()).postDelayed({
             if (shouldSplashScreen) {
-                supportFragmentManager.beginTransaction().setCustomAnimations(R.anim.abc_fade_out, R.anim.abc_fade_out)
+                supportFragmentManager.beginTransaction().setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
                     .replace(R.id.fragment_container, mainFragment).commitAllowingStateLoss()
                 shouldSplashScreen = false
             }
