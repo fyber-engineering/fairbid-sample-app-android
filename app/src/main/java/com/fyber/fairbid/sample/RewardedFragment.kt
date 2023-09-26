@@ -110,8 +110,8 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
             }
 
-            override fun onRequestStart(placement: String) {
-                Log.v(REWARDED_FRAGMENT_TAG, "onShowFailure $placement")
+            override fun onRequestStart(placement: String, requestId: String) {
+                Log.v(REWARDED_FRAGMENT_TAG, "onRequestStart $placement - $requestId")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
             }
 
