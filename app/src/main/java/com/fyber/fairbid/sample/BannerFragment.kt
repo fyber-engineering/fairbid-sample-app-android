@@ -151,8 +151,8 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
             }
 
-            override fun onRequestStart(placement: String) {
-                Log.v(BANNER_FRAGMENT_TAG, "onRequestStart $placement")
+            override fun onRequestStart(placement: String, requestId: String) {
+                Log.v(BANNER_FRAGMENT_TAG, "onRequestStart $placement - $requestId")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
             }
 
