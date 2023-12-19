@@ -39,7 +39,7 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
          * "109613" can be used a sample application.
          * TODO replace with your own app id.
          */
-        private const val PUBLISHERS_APP_ID = "109613"
+        private const val PUBLISHERS_APP_ID = "110073"
     }
 
 

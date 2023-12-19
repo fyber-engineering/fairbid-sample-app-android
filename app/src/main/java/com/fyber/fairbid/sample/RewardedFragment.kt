@@ -48,7 +48,7 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
          * "RewardedPlacementIdExample" can be used using the provided example APP_ID
          * TODO change to your own configured placement.
          */
-        private const val REWARDED_PLACEMENT_NAME = "197406"
+        private const val REWARDED_PLACEMENT_NAME = "211733"
     }
 
     private lateinit var requestButton: View
@@ -110,8 +110,8 @@ class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
             }
 
-            override fun onRequestStart(placement: String, requestId: String) {
-                Log.v(REWARDED_FRAGMENT_TAG, "onRequestStart $placement - $requestId")
+            override fun onRequestStart(placement: String) {
+                Log.v(REWARDED_FRAGMENT_TAG, "onRequestStart $placement")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
             }
 

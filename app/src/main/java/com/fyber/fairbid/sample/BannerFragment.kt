@@ -58,8 +58,8 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
 
 
         fun createInstance(bannerType: MainFragment.UnitType): BannerFragment {
-            val BANNER_PLACEMENT_NAME = "197407"
-            val MREC_PLACEMENT_NAME = "936586"
+            val BANNER_PLACEMENT_NAME = "199661"
+            val MREC_PLACEMENT_NAME = "199661"
 
             val arguments = Bundle().apply {
                 when (bannerType) {
@@ -151,8 +151,8 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
             }
 
-            override fun onRequestStart(placement: String, requestId: String) {
-                Log.v(BANNER_FRAGMENT_TAG, "onRequestStart $placement - $requestId")
+            override fun onRequestStart(placement: String) {
+                Log.v(BANNER_FRAGMENT_TAG, "onRequestStart $placement")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
             }
 

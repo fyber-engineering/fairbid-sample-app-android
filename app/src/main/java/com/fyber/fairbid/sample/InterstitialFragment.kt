@@ -49,7 +49,7 @@ class InterstitialFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
          * "InterstitialPlacementIdExample" can be used using the provided example APP_ID
          * TODO change to your own configured placement.
          */
-        private const val INTERSTITIAL_PLACEMENT_NAME = "197405"
+        private const val INTERSTITIAL_PLACEMENT_NAME = "199659"
     }
 
     private lateinit var cleanCallBacks: Button
@@ -110,8 +110,8 @@ class InterstitialFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
             }
 
-            override fun onRequestStart(placement: String, requestId: String) {
-                Log.v(INTERSTITIAL_FRAGMENT_TAG, "onRequestStart $placement - $requestId")
+            override fun onRequestStart(placement: String) {
+                Log.v(INTERSTITIAL_FRAGMENT_TAG, "onRequestStart $placement")
                 OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
             }
 
