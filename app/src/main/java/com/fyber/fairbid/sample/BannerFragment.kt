@@ -28,6 +28,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.fyber.FairBid
 import com.fyber.fairbid.ads.Banner
@@ -108,7 +109,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
 
         if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.ad_container_fragment, container, false)
-            fragmentView?.let { it ->
+            fragmentView?.let {
                 initializeUiElements(it)
 //                setListener()
             }
@@ -242,7 +243,6 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                 Log.w("BF", "bannerImpressionDataListener: changing the listener")
                 Banner.setBannerListener(realBannerListener)
                 Log.w("BF", "bannerImpressionDataListener: unveiling the banner")
-                bannerContainer.visibility = View.VISIBLE
             }
         }
         realBannerListener = object : BannerListenerImpl(recyclerView, requireContext(), ::onAdAvailableAnimation, ::resetAnimation) {
@@ -315,6 +315,9 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
             cleanCallBacks.isEnabled = false
             OnScreenCallbacksHelper.clearLog(recyclerView)
         }
+        view.findViewById<Button>(R.id.show_hide_container_view_button).setOnClickListener {
+            bannerContainer.flipVisibility()
+        }
     }
 
     /**
@@ -350,4 +353,14 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
     override fun onFirstLogLine() {
         cleanCallBacks.isEnabled = true
     }
+}
+
+private fun View.flipVisibility() {
+    val newVisibility = when (this.visibility) {
+        View.GONE,
+        View.INVISIBLE -> View.VISIBLE
+        View.VISIBLE -> View.INVISIBLE
+        else -> throw IllegalArgumentException("unexpected argument")
+    }
+    this.visibility = newVisibility
 }
