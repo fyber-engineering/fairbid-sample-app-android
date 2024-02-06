@@ -16,6 +16,7 @@
 package com.fyber.fairbid.sample
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,7 +29,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.fyber.FairBid
 import com.fyber.fairbid.ads.Banner
+import com.fyber.fairbid.ads.FairBidListener
 import com.fyber.fairbid.ads.ImpressionData
 import com.fyber.fairbid.ads.banner.BannerError
 import com.fyber.fairbid.ads.banner.BannerListener
@@ -58,8 +61,12 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
 
 
         fun createInstance(bannerType: MainFragment.UnitType): BannerFragment {
-            val BANNER_PLACEMENT_NAME = "197407"
-            val MREC_PLACEMENT_NAME = "936586"
+//            val BANNER_PLACEMENT_NAME = "216936"
+            val BANNER_PLACEMENT_NAME = "220161"
+
+
+
+//            val MREC_PLACEMENT_NAME = "936586"
 
             val arguments = Bundle().apply {
                 when (bannerType) {
@@ -68,7 +75,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                         putBoolean(IS_MREC_KEY, false)
                     }
                     MainFragment.UnitType.Mrec -> {
-                        putString(PLACEMENT_KEY, MREC_PLACEMENT_NAME)
+//                        putString(PLACEMENT_KEY, MREC_PLACEMENT_NAME)
                         putBoolean(IS_MREC_KEY, true)
                     }
                     else -> throw IllegalArgumentException("Unsupported banner type: $bannerType")
@@ -80,6 +87,8 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         }
     }
 
+    lateinit var bannerImpressionDataListener: BannerListener
+    lateinit var realBannerListener: BannerListener
     private lateinit var loadBannerButton: View
     private lateinit var cleanCallBacks: Button
     private lateinit var destroyBannerButton: Button
@@ -101,7 +110,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
             fragmentView = inflater.inflate(R.layout.ad_container_fragment, container, false)
             fragmentView?.let { it ->
                 initializeUiElements(it)
-                setListener()
+//                setListener()
             }
         }
         return fragmentView
@@ -115,6 +124,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
     private fun displayBanner(bannerPlacementName: String) {
         Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
         val bannerOptions: BannerOptions = generateBannerOptions()
+        Banner.setBannerListener(bannerImpressionDataListener)
         Banner.show(bannerPlacementName, bannerOptions, activity as Activity)
         startRequestAnimation()
     }
@@ -126,6 +136,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         //Calling the API method BannerOptions().placeInContainer in order to set banner position in the desired view group
 
         return BannerOptions()
+            .setRefreshMode(BannerOptions.RefreshMode.OFF)
             .placeInContainer(bannerContainer)
             .withSize(bannerSize)
     }
@@ -139,42 +150,45 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
         Log.v(BANNER_FRAGMENT_TAG, "destroyBanner()")
         Banner.destroy(bannerPlacementName)
         resetAnimation()
+        bannerContainer.visibility = View.GONE
     }
 
     /**
      * This function provides an example of Listening to FairBid Banner Callbacks and events.
      */
-    private fun setListener() {
-        val bannerListener = object : BannerListener {
-            override fun onShow(placement: String, impressionData: ImpressionData) {
-                Log.v(BANNER_FRAGMENT_TAG, "onShow $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
-            }
-
-            override fun onRequestStart(placement: String, requestId: String) {
-                Log.v(BANNER_FRAGMENT_TAG, "onRequestStart $placement - $requestId")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
-            }
-
-            override fun onClick(placement: String) {
-                Log.v(BANNER_FRAGMENT_TAG, "onClick $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_CLICK)
-            }
-
-            override fun onLoad(placement: String) {
-                Log.v(BANNER_FRAGMENT_TAG, "onLoad $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_LOAD)
-                onAdAvailableAnimation()
-            }
-
-            override fun onError(placement: String, error: BannerError) {
-                Log.v(BANNER_FRAGMENT_TAG, "onError $placement, error:" + error.errorMessage)
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_ERROR + ": " + error.errorMessage)
-                resetAnimation()
-            }
-
+    open class BannerListenerImpl(
+        val recyclerView: RecyclerView,
+        val context: Context,
+        val onAdAvailableAnimation: () -> Unit,
+        val resetAnimation: () -> Unit
+    ) : BannerListener {
+        override fun onShow(placement: String, impressionData: ImpressionData) {
+            Log.v(BANNER_FRAGMENT_TAG, "onShow $placement")
+            OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
         }
-        Banner.setBannerListener(bannerListener)
+
+        override fun onRequestStart(placement: String, requestId: String) {
+            Log.v(BANNER_FRAGMENT_TAG, "onRequestStart $placement - $requestId")
+            OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
+        }
+
+        override fun onClick(placement: String) {
+            Log.v(BANNER_FRAGMENT_TAG, "onClick $placement")
+            OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_CLICK)
+        }
+
+        override fun onLoad(placement: String) {
+            Log.v(BANNER_FRAGMENT_TAG, "onLoad $placement")
+            OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_LOAD)
+            onAdAvailableAnimation()
+        }
+
+        override fun onError(placement: String, error: BannerError) {
+            Log.v(BANNER_FRAGMENT_TAG, "onError $placement, error:" + error.errorMessage)
+            OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_ERROR + ": " + error.errorMessage)
+            resetAnimation()
+        }
+
     }
 
     /**
@@ -191,7 +205,7 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
             BannerSize.MREC -> R.drawable.fb_ic_mrec
         }.let { placementIcon.setImageResource(it) }
         bannerContainer = view.findViewById(R.id.banner_container)
-        bannerContainer.visibility = View.VISIBLE
+        bannerContainer.visibility = View.GONE
     }
 
     /**
@@ -201,6 +215,62 @@ class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
     private fun initLogRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recycler_callbacks)
         OnScreenCallbacksHelper.configureRecycler(recyclerView, requireActivity(), this)
+        bannerImpressionDataListener = object : BannerListenerImpl(recyclerView, requireContext(), ::onAdAvailableAnimation, ::resetAnimation) {
+            override fun onClick(placementId: String) {
+                super.onClick(placementId)
+                Log.w("BF", "bannerImpressionDataListener: onClick")
+            }
+
+            override fun onError(placementId: String, error: BannerError) {
+                super.onError(placementId, error)
+                Log.w("BF", "bannerImpressionDataListener: onError")
+            }
+
+            override fun onLoad(placementId: String) {
+                super.onLoad(placementId)
+                Log.w("BF", "bannerImpressionDataListener: onLoad")
+            }
+
+            override fun onRequestStart(placementId: String, requestId: String) {
+                super.onRequestStart(placementId, requestId)
+                Log.w("BF", "bannerImpressionDataListener: onRequestStart")
+            }
+
+            override fun onShow(placementId: String, impressionData: ImpressionData) {
+                super.onShow(placementId, impressionData)
+                Log.w("BF", "bannerImpressionDataListener: $impressionData")
+                Log.w("BF", "bannerImpressionDataListener: changing the listener")
+                Banner.setBannerListener(realBannerListener)
+                Log.w("BF", "bannerImpressionDataListener: unveiling the banner")
+                bannerContainer.visibility = View.VISIBLE
+            }
+        }
+        realBannerListener = object : BannerListenerImpl(recyclerView, requireContext(), ::onAdAvailableAnimation, ::resetAnimation) {
+            override fun onClick(placementId: String) {
+                super.onClick(placementId)
+                Log.w("BF", "realBannerListener: onClick")
+            }
+
+            override fun onError(placementId: String, error: BannerError) {
+                super.onError(placementId, error)
+                Log.w("BF", "realBannerListener: onError")
+            }
+
+            override fun onLoad(placementId: String) {
+                super.onLoad(placementId)
+                Log.w("BF", "realBannerListener: onLoad")
+            }
+
+            override fun onRequestStart(placementId: String, requestId: String) {
+                super.onRequestStart(placementId, requestId)
+                Log.w("BF", "realBannerListener: onRequestStart")
+            }
+
+            override fun onShow(placementId: String, impressionData: ImpressionData) {
+                super.onShow(placementId, impressionData)
+                Log.w("BF", "realBannerListener: $impressionData")
+            }
+        }
     }
 
     /**
