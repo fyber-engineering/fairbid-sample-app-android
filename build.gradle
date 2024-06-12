@@ -18,6 +18,11 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        // Mintegral
+        maven {
+            name "Mintegral's maven repository"
+            url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea'
+        }
     }
 }
 

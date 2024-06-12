@@ -68,4 +68,11 @@ dependencies {
 
     // necessary when including several mediated networks
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Mintegral
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.mbridge.msdk.oversea:mbbanner:16.7.21'
+    implementation 'com.mbridge.msdk.oversea:mbbid:16.7.21'
+    implementation 'com.mbridge.msdk.oversea:newinterstitial:16.7.21'
+    implementation 'com.mbridge.msdk.oversea:reward:16.7.21'
 }
