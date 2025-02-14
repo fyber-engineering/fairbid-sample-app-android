@@ -4,7 +4,7 @@ pluginManagement {
         google()
     }
     plugins {
-        id 'com.fyber.fairbid-sdk-plugin' version '3.58.0'
+        id 'com.fyber.fairbid-sdk-plugin' version '3.58.1'
         id 'com.android.application'
         id 'kotlin-android'
     }
