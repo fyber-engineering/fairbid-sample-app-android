@@ -109,7 +109,7 @@ class MainFragment : Fragment() {
     /**
      * Enum describing the possible choices in the sample application
      */
-    enum class UnitType { Interstitial, Rewarded, Banner, Mrec, TestSuite }
+    enum class UnitType { Interstitial, Rewarded, Banner, BannerView, Mrec, TestSuite }
 
     /**
      * a model for the displayed items
@@ -142,6 +142,13 @@ class MainFragment : Fragment() {
                 "MREC Banner",
                 R.drawable.fb_ic_mrec,
                 UnitType.Mrec
+            )
+        ),
+        Row(
+            payload = UnitRowData(
+                "Banner view",
+                R.drawable.fb_ic_banner,
+                UnitType.BannerView
             )
         ),
         Row(

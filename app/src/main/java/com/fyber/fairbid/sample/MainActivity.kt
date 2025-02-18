@@ -22,6 +22,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.fyber.FairBid
+import com.fyber.fairbid.ads.banner.BannerView
 import com.fyber.fairbid.utilities.MainFragment
 import com.fyber.fairbid.utilities.MainFragment.UnitType
 import com.fyber.fairbid.utilities.SplashScreenFragment
@@ -45,6 +46,7 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
 
     private val bannerFragment = BannerFragment.createInstance(UnitType.Banner)
     private val mrecFragment = BannerFragment.createInstance(UnitType.Mrec)
+    private val bannerViewFragment = BannerViewFragment.createInstance(UnitType.Banner)
     private val rewardedFragment = RewardedFragment()
     private val interstitialFragment = InterstitialFragment()
     private val mainFragment = MainFragment()
@@ -99,6 +101,10 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         when (unitType) {
             UnitType.Banner -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bannerFragment)
+                    .addToBackStack(null).commit()
+            }
+            UnitType.BannerView -> {
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bannerViewFragment)
                     .addToBackStack(null).commit()
             }
             UnitType.Mrec -> {
