@@ -79,6 +79,10 @@ class BannerViewFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
             }
         }
 
+        bannerView = BannerView(requireContext(), bannerPlacementId).also {
+            setListener(it)
+            it.load()
+        }
         return fragmentView
     }
 
@@ -88,10 +92,7 @@ class BannerViewFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
      */
     private fun displayBanner() {
         Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
-        bannerView = BannerView(requireContext(), bannerPlacementId).also {
-            setListener(it)
-            it.load()
-        }
+        bannerContainer.addView(bannerView)
     }
 
     /**
@@ -148,7 +149,6 @@ class BannerViewFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                     OnScreenCallbacksHelper.ON_LOAD
                 )
                 onAdAvailableAnimation()
-                bannerContainer.addView(bannerView)
             }
 
             override fun onError(placementId: String, error: BannerError) {
