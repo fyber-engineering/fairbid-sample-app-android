@@ -21,6 +21,7 @@ import com.fyber.fairbid.utilities.MainFragment
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 
 private const val BANNER_FRAGMENT_TAG = "BannerViewFragment"
+
 /**
  * A Fragment demonstrating how to request and display banner ads using the FairBid SDK.
  */
@@ -44,6 +45,7 @@ class BannerViewFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
                         putString(PLACEMENT_KEY, BANNER_PLACEMENT_NAME)
                         putBoolean(IS_MREC_KEY, false)
                     }
+
                     else -> throw IllegalArgumentException("Unsupported banner type: $bannerType")
                 }
             }
@@ -67,18 +69,28 @@ class BannerViewFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
 
     private var bannerView: BannerView? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         bannerPlacementId = requireArguments().getString(PLACEMENT_KEY, "")
         bannerSize = requireArguments().getBoolean(IS_MREC_KEY)
             .let { isMrec -> if (isMrec) BannerSize.MREC else BannerSize.SMART }
 
         if (fragmentView == null) {
-            fragmentView = inflater.inflate(R.layout.banner_view_container_fragment, container, false)
+            fragmentView =
+                inflater.inflate(R.layout.banner_view_container_fragment, container, false)
             fragmentView?.let {
                 initializeUiElements(it)
             }
         }
-
+        bannerView = BannerView(requireContext(), bannerPlacementId).also {
+            setListener(it)
+            it.load()
+            it.visibility = View.INVISIBLE
+            bannerContainer.addView(it)
+        }
         return fragmentView
     }
 
@@ -88,10 +100,7 @@ class BannerViewFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
      */
     private fun displayBanner() {
         Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
-        bannerView = BannerView(requireContext(), bannerPlacementId).also {
-            setListener(it)
-            it.load()
-        }
+        bannerView?.visibility = View.VISIBLE
     }
 
     /**
