@@ -2,9 +2,35 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--    this is required when you want to both support devices under API 19 and still integrate Unity ads (which declares minimum API as 19)
-    more information in FairBid's dev portal: https://developer.fyber.com/hc/en-us/articles/360010172138-Unity-Ads-->
-    <uses-sdk tools:overrideLibrary="com.unity3d.ads, com.snap.adkit.distribution" />
+        <!-- Several networks FairBid mediates impose a min API higher than FairBid does.
+    By declaring them within the 'overrideLibrary' you can still use a lower min API in your app.
+    FairBid will ensure, at runtime, that none of these networks will be started when running on a OS lower the minimum one required.-->
+
+    <uses-sdk tools:overrideLibrary="com.bytedance,
+                                     com.google.android.ads.consent,
+                                     com.google.android.gms.ads,
+                                     com.google.android.gms.ads.impl,
+                                     com.google.android.gms.common,
+                                     com.google.android.gms.tasks,
+                                     com.my.target,
+                                     com.my.tracker,
+                                     com.ogury.ad,
+                                     com.ogury.core,
+                                     com.ogury.sdk,
+                                     com.tiktok,
+                                     io.github.mytargetsdk,
+                                     net.pubnative.lite.sdk,
+                                     net.pubnative.lite.sdk.banner,
+                                     net.pubnative.lite.sdk.core,
+                                     net.pubnative.lite.sdk.interstitial,
+                                     net.pubnative.lite.sdk.logger,
+                                     net.pubnative.lite.sdk.nativeads,
+                                     net.pubnative.lite.sdk.reporting,
+                                     net.pubnative.lite.sdk.rewarded,
+                                     net.pubnative.lite.sdk.source.pnapi,
+                                     net.pubnative.lite.sdk.topicsapi,
+                                     net.pubnative.lite.sdk.viewability" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
