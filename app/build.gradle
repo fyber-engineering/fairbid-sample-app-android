@@ -26,7 +26,7 @@ android {
 
     defaultConfig {
         applicationId "com.fyber.fairbid.sample"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
