@@ -5,7 +5,7 @@ This sample app demonstrates the FairBid SDK integration best practices. It is a
 Please note that when it comes to actually demonstrating the product "FairBid" as a monetization platform this sample app might fail due to the fact that ad delivery depends on factors like your country, your device your AAID/IDFA or any other kind of information that ad networks might have collected about you and that are taken into consideration when placing a bid to show an ad to you.
 
 #### Prerequisites
-* Minimum SDK 16 (Jelly Bean 4.1.x) 
+* Minimum SDK 19 (KitKat 4.4) 
 * Android build plugin 3.4.2 / Gradle 5.4.1 / Kotlin 1.3.61 
 
 #### Navigating the sample code
