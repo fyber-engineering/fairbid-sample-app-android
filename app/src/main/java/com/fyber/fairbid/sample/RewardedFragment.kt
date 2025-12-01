@@ -15,22 +15,29 @@
  */
 package com.fyber.fairbid.sample
 
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fyber.fairbid.ads.ImpressionData
 import com.fyber.fairbid.ads.Rewarded
 import com.fyber.fairbid.ads.rewarded.RewardedListener
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
+import com.fyber.fairbid.utilities.LogsList
 
 /**
  * Log tag
@@ -38,205 +45,245 @@ import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 private const val REWARDED_FRAGMENT_TAG = "RewardedFragment"
 
 /**
- * A Fragment demonstrating how to request and display interstitial ads using the FairBid SDK.
+ * A Screen demonstrating how to request and display rewarded ads using the FairBid SDK.
  */
-class RewardedFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
+@Composable
+fun RewardedScreen(onBack: () -> Unit) {
+    val context = LocalContext.current
+    val activity = context as? androidx.activity.ComponentActivity
+    val rewardedPlacementName = "197406"
 
-    companion object {
-        /**
-         * The Rewarded's placement name - as configured at Fyber console
-         * "RewardedPlacementIdExample" can be used using the provided example APP_ID
-         * TODO change to your own configured placement.
-         */
-        private const val REWARDED_PLACEMENT_NAME = "197406"
+    var logs by remember { mutableStateOf(listOf<String>()) }
+    var isLoading by remember { mutableStateOf(false) }
+    var isAdAvailable by remember { mutableStateOf(false) }
+
+    val addLog = { message: String ->
+        logs = logs + "${OnScreenCallbacksHelper.getCurrentTime()} - $message"
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    private lateinit var requestButton: View
-    private lateinit var cleanCallBacks: Button
-    private lateinit var showButton: Button
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var progressBar: ProgressBar
-    private var fragmentView: View? = null
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (fragmentView == null) {
-            fragmentView = inflater.inflate(R.layout.ad_container_fragment, container, false)
-            fragmentView?.let { it ->
-                initializeUiElements(it)
-                setListener()
-            }
-        }
-        return fragmentView
-    }
-
-    /**
-     * Called when the requestButton is clicked
-     * This function provides an example for calling the API method Rewarded.rqueest in order to request a rewarded placement
-     * @param rewardedPlacementName name of placement to be requested
-     */
-    private fun requestRewarded(rewardedPlacementName: String) {
-        Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
-        /** request a new ad in case there is no available ad to show */
-        if (!Rewarded.isAvailable(rewardedPlacementName)) {
-            Rewarded.request(rewardedPlacementName)
-            startRequestAnimation()
-        }
-    }
-
-    /**
-     * Called when the showButton is clicked
-     * This function provides an example for calling the API method Rewarded.show in order to show the ad received in the provided placement
-     * @param rewardedPlacementName name of placement to be displayed
-     */
-    private fun showRewarded(rewardedPlacementName: String) {
-        Log.v(REWARDED_FRAGMENT_TAG, "Showing RewardedVideo")
-        Rewarded.show(rewardedPlacementName, activity)
-        resetAnimation()
-    }
-
-    /**
-     * This function provides an example of Listening to FairBid BanRewardedner Callbacks and events.
-     */
-    private fun setListener() {
+    DisposableEffect(Unit) {
         val rewardedListener = object : RewardedListener {
             override fun onShow(placement: String, impressionData: ImpressionData) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onShow $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
+                addLog(OnScreenCallbacksHelper.ON_SHOW)
             }
 
             override fun onShowFailure(placement: String, impressionData: ImpressionData) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onShowFailure $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW_FAILURE)
+                addLog(OnScreenCallbacksHelper.ON_SHOW_FAILURE)
             }
 
             override fun onRequestStart(placement: String, requestId: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onRequestStart $placement - $requestId")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
+                addLog(OnScreenCallbacksHelper.ON_REQUEST_START)
             }
 
             override fun onClick(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onClick $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_CLICK)
+                addLog(OnScreenCallbacksHelper.ON_CLICK)
             }
 
             override fun onHide(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onHide $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_HIDE)
+                addLog(OnScreenCallbacksHelper.ON_HIDE)
             }
 
             override fun onAvailable(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onAvailable $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_AVAILABLE)
-                onAdAvailableAnimation()
+                addLog(OnScreenCallbacksHelper.ON_AVAILABLE)
+                isLoading = false
+                isAdAvailable = true
             }
 
             override fun onUnavailable(placement: String) {
                 Log.v(REWARDED_FRAGMENT_TAG, "onUnavailable $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_UNAVAILABLE)
-                resetAnimation()
+                addLog(OnScreenCallbacksHelper.ON_UNAVAILABLE)
+                isLoading = false
+                isAdAvailable = false
             }
 
             override fun onCompletion(placement: String, userRewarded: Boolean) {
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, if (userRewarded) OnScreenCallbacksHelper.ON_COMPLETION else "${OnScreenCallbacksHelper.ON_COMPLETION}: $userRewarded")
+                addLog(if (userRewarded) OnScreenCallbacksHelper.ON_COMPLETION else "${OnScreenCallbacksHelper.ON_COMPLETION}: $userRewarded")
                 Log.v(REWARDED_FRAGMENT_TAG, "onCompletion rewarded status: $userRewarded, $placement")
             }
-
         }
         Rewarded.setRewardedListener(rewardedListener)
-    }
 
-    /**
-     * Internal sample method. initialize the UI elements in this fragment.
-     * @param view the container view for this fragment
-     */
-    private fun initializeUiElements(view: View) {
-        initLogRecycler(view)
-        initTextViews(view)
-        initButtons(view)
-    }
-
-    /**
-     * Internal sample method. initialize the recycler view used to display callbacks and events.
-     * @param view the container view for this fragment
-     */
-    private fun initLogRecycler(view: View) {
-        recyclerView = view.findViewById(R.id.recycler_callbacks)
-        OnScreenCallbacksHelper.configureRecycler(recyclerView, requireActivity(), this)
-    }
-
-    /**
-     * Internal sample method. initialize the text views in this fragment
-     * @param view the container view for this fragment
-     */
-    private fun initTextViews(view: View) {
-        val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
-        placementName.text = REWARDED_PLACEMENT_NAME
-        val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
-        headerName.text = getString(R.string.rewarded_header_name)
-        val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
-        placementIcon.background = ContextCompat.getDrawable(requireContext(), R.drawable.fb_ic_rewarded)
-    }
-
-    /**
-     * Internal sample method. initialize the buttons and click listeners in this fragment
-     * @param view the container view for this fragment
-     */
-    private fun initButtons(view: View) {
-        requestButton = view.findViewById(R.id.text_progress_bar)
-        requestButton.setOnClickListener {
-            requestRewarded(REWARDED_PLACEMENT_NAME)
+        onDispose {
+            // Cleanup if needed
         }
-        showButton = view.findViewById(R.id.show_ad)
-        showButton.setOnClickListener {
-            showRewarded(REWARDED_PLACEMENT_NAME)
-        }
-        val backButton: ImageView = view.findViewById(R.id.back_button) as ImageView
-        backButton.setOnClickListener {
-            requireActivity().onBackPressed()
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        // Header
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFEFEFF4))
+                .padding(top = 10.dp, bottom = 11.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowLeft,
+                contentDescription = "Back",
+                modifier = Modifier
+                    .size(30.dp)
+                    .align(Alignment.CenterStart)
+                    .clickable { onBack() },
+                tint = Color.Black
+            )
+
+            Text(
+                text = stringResource(id = R.string.rewarded_header_name),
+                modifier = Modifier.align(Alignment.Center),
+                fontSize = 20.sp,
+                color = Color(0xFF1D0047),
+                lineHeight = 25.8.sp
+            )
         }
 
-        cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
-        cleanCallBacks.setOnClickListener {
-            cleanCallBacks.isEnabled = false
-            OnScreenCallbacksHelper.clearLog(recyclerView)
+        Divider(color = Color(0xFFC3C3C3), thickness = 1.dp)
+
+        // Placement info
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, top = 26.dp, end = 5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.fb_ic_rewarded),
+                contentDescription = "Placement icon",
+                modifier = Modifier.size(50.dp)
+            )
+
+            Column(
+                modifier = Modifier.padding(start = 12.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.placement_id),
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = rewardedPlacementName,
+                    fontSize = 14.sp,
+                    color = Color.Black
+                )
+            }
         }
-        progressBar = view.findViewById(R.id.progress_bar)
+
+        // Buttons
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Request button with progress
+            Box(
+                modifier = Modifier
+                    .weight(0.5f)
+                    .height(48.dp)
+                    .background(Color(0xFF6A1B9A))
+                    .clickable {
+                        Log.v(REWARDED_FRAGMENT_TAG, "Requesting RewardedVideo")
+                        if (!Rewarded.isAvailable(rewardedPlacementName)) {
+                            Rewarded.request(rewardedPlacementName)
+                            isLoading = true
+                        }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(35.dp),
+                            color = Color.White,
+                            strokeWidth = 3.dp
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+                    Text(
+                        text = stringResource(id = R.string.request_ad),
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+
+            // Show button
+            Button(
+                onClick = {
+                    Log.v(REWARDED_FRAGMENT_TAG, "Showing RewardedVideo")
+                    activity?.let { Rewarded.show(rewardedPlacementName, it) }
+                    isAdAvailable = false
+                    isLoading = false
+                },
+                enabled = isAdAvailable,
+                modifier = Modifier
+                    .weight(0.5f)
+                    .height(48.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFF6A1B9A),
+                    disabledBackgroundColor = Color(0xFFC5D0DE)
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.show_ad),
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            }
+        }
+
+        // Callbacks list header
+        Text(
+            text = stringResource(id = R.string.callbacks_list),
+            modifier = Modifier.padding(start = 20.dp, top = 15.dp),
+            fontSize = 14.sp,
+            color = Color.Black
+        )
+
+        Divider(
+            color = Color(0xFFC3C3C3),
+            thickness = 1.dp,
+            modifier = Modifier.padding(top = 11.dp)
+        )
+
+        // Logs list
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
+            LogsList(logs = logs)
+        }
+
+        // Clean button
+        Button(
+            onClick = { logs = emptyList() },
+            enabled = logs.isNotEmpty(),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 30.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFF6A1B9A),
+                disabledBackgroundColor = Color(0xFFC5D0DE)
+            )
+        ) {
+            Text(
+                text = stringResource(id = R.string.clean_callbacks_list),
+                color = Color.White,
+                fontSize = 16.sp
+            )
+        }
     }
-
-    /**
-     * Internal sample method.
-     * Starts the request/loading animation
-     */
-    private fun startRequestAnimation() {
-        progressBar.visibility = View.VISIBLE
-        showButton.isEnabled = false
-    }
-
-    /**
-     * Internal sample method.
-     * Stops the request/loading animation and enables destroying the banner
-     */
-    private fun onAdAvailableAnimation() {
-        showButton.isEnabled = true
-        progressBar.visibility = View.GONE
-    }
-
-    /**
-     * Internal sample method.
-     * Resets the UI state for the progress animation / destroy button
-     */
-    private fun resetAnimation() {
-        progressBar.visibility = View.GONE
-        showButton.isEnabled = false
-    }
-
-    /**
-     * Invoked when the on-screen log became non-empty. used to enable/disable the clean button
-     */
-    override fun onFirstLogLine() {
-        cleanCallBacks.isEnabled = true
-    }
-
-
 }

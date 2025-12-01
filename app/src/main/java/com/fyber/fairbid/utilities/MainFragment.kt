@@ -15,101 +15,54 @@
  */
 package com.fyber.fairbid.utilities
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fyber.FairBid
 import com.fyber.fairbid.sample.R
+
+/**
+ * Interface for letting the activity know when the user has made some choice
+ */
+interface FragmentListener {
+    /**
+     * Called when the user has clicked some unit type.
+     * @param unitType The clicked unit type
+     */
+    fun onButtonClicked(unitType: MainFragment.UnitType)
+}
 
 /**
  * Internal class for displaying the sample with multiple choices.
  * This fragment does not contain any sample code for FairBid
  */
-class MainFragment : Fragment() {
-
-    /**
-     * interface for letting the activity know when the user has made some choice
-     */
-    interface FragmentListener {
-        /**
-         * Called when the user has clicked some unit type.
-         * @param unitType The clicked unit type
-         */
-        fun onButtonClicked(unitType: UnitType)
-    }
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var fairBidVersionTextView: TextView
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view: View = inflater.inflate(R.layout.main_fragment, container, false)
-        initializeRecyclerView(view)
-        initVersionTextView(view)
-        return view
-    }
-
-    /**
-     * Initializes the recycler view
-     * @param view the container view for this fragment
-     */
-    private fun initializeRecyclerView(view: View) {
-        recyclerView = view.findViewById(R.id.units_recycler)
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = ListAdapter(mUnits, if (context is FragmentListener) context as FragmentListener else null)
-        }
-    }
-
-    /**
-     * Initialize the version text view and set it with the proper text value
-     * @param view the container view for this fragment
-     */
-    private fun initVersionTextView(view: View) {
-        fairBidVersionTextView = view.findViewById(R.id.fairbid_version)
-        fairBidVersionTextView.text = String.format("%s %s", fairBidVersionTextView.text, FairBid.SDK_VERSION)
-    }
-
-    /**
-     * The view holder for rows/items in the recycler view
-     */
-    class UnitRowDataHolder(inflater: LayoutInflater, parent: ViewGroup, var mListener: FragmentListener?) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.item_unit_row, parent, false)) {
-
-        private var unitIcon: ImageView = itemView.findViewById(R.id.row_unit_image)
-        private var unitText: TextView = itemView.findViewById(R.id.row_text_unit)
-        private var rightArrow: ImageView = itemView.findViewById(R.id.right_unit_arrow)
-
-        fun bind(unitRowData: UnitRowData) {
-            unitIcon.background = ContextCompat.getDrawable(itemView.context, unitRowData.resourceImage)
-            unitText.text = unitRowData.unitText
-            rightArrow.setOnClickListener {
-                mListener?.onButtonClicked(unitRowData.unitType)
-            }
-        }
-    }
-
-    /**
-     * The view holder for separators/dividers
-     */
-    class SeparatorViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.item_separator_row, parent, false))
-
-    /**
-     * Enum to help differentiate between items and separators
-     */
-    enum class RowType { Row, Separator }
+class MainFragment {
 
     /**
      * Enum describing the possible choices in the sample application
      */
     enum class UnitType { Interstitial, Rewarded, Banner, Mrec, TestSuite }
+
+    /**
+     * Enum to help differentiate between items and separators
+     */
+    enum class RowType { Row, Separator }
 
     /**
      * a model for the displayed items
@@ -125,80 +78,151 @@ class MainFragment : Fragment() {
      * @property payload the object describing this row, if any
      */
     data class Row(val type: RowType = RowType.Row, val payload: Any? = null)
+}
 
-    /**
-     * A simple list to contain the choices in the recycler view
-     */
-    private val mUnits = listOf(
-        Row(
-            payload = UnitRowData(
+@Composable
+fun MainScreen(onButtonClicked: (MainFragment.UnitType) -> Unit) {
+    val units = listOf(
+        MainFragment.Row(
+            payload = MainFragment.UnitRowData(
                 "Banner",
                 R.drawable.fb_ic_banner,
-                UnitType.Banner
+                MainFragment.UnitType.Banner
             )
         ),
-        Row(
-            payload = UnitRowData(
+        MainFragment.Row(
+            payload = MainFragment.UnitRowData(
                 "MREC Banner",
                 R.drawable.fb_ic_mrec,
-                UnitType.Mrec
+                MainFragment.UnitType.Mrec
             )
         ),
-        Row(
-            payload = UnitRowData(
+        MainFragment.Row(
+            payload = MainFragment.UnitRowData(
                 "Interstitial",
                 R.drawable.fb_ic_interstitial,
-                UnitType.Interstitial
+                MainFragment.UnitType.Interstitial
             )
         ),
-        Row(
-            payload = UnitRowData(
+        MainFragment.Row(
+            payload = MainFragment.UnitRowData(
                 "Rewarded",
                 R.drawable.fb_ic_rewarded,
-                UnitType.Rewarded
+                MainFragment.UnitType.Rewarded
             )
         ),
-        Row(type = RowType.Separator),
-        Row(
-            payload = UnitRowData(
+        MainFragment.Row(type = MainFragment.RowType.Separator),
+        MainFragment.Row(
+            payload = MainFragment.UnitRowData(
                 "Test Suite",
                 R.drawable.fb_ic_test_suite,
-                UnitType.TestSuite
+                MainFragment.UnitType.TestSuite
             )
         )
     )
 
-    /**
-     * The adapter for recycler view
-     */
-    class ListAdapter(private val list: List<Row>, var mListener: FragmentListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            val inflater = LayoutInflater.from(parent.context)
-            return if (viewType == RowType.Row.ordinal) {
-                UnitRowDataHolder(inflater, parent, mListener)
-            } else {
-                SeparatorViewHolder(inflater, parent)
-            }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFEFEFF4))
+    ) {
+        // Header
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFD1F8F8F8))
+                .padding(start = 20.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.sample_app),
+                fontSize = 32.sp,
+                color = Color.Black,
+                modifier = Modifier.padding(top = 0.dp)
+            )
+            Text(
+                text = "${stringResource(id = R.string.dt_fairbid)} ${FairBid.SDK_VERSION}".uppercase(),
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 13.dp),
+                fontSize = 14.sp
+            )
         }
 
-        override fun getItemViewType(position: Int): Int {
-            return list[position].type.ordinal
-        }
+        Divider(
+            color = Color(0xFFC3C3C3),
+            thickness = 2.dp
+        )
 
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-            if (getItemViewType(position) == RowType.Row.ordinal) {
-
-                val unitRowData: UnitRowData = list[position].payload as UnitRowData
-                (holder as UnitRowDataHolder).bind(unitRowData)
-                holder.itemView.setOnClickListener {
-                    mListener?.onButtonClicked((list[position].payload as UnitRowData).unitType)
+        // List
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+            items(units) { row ->
+                when (row.type) {
+                    MainFragment.RowType.Row -> {
+                        val unitRowData = row.payload as MainFragment.UnitRowData
+                        UnitRow(
+                            unitRowData = unitRowData,
+                            onClick = { onButtonClicked(unitRowData.unitType) }
+                        )
+                    }
+                    MainFragment.RowType.Separator -> {
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                                .background(Color(0xFFEFEFF4))
+                        )
+                    }
                 }
             }
         }
-
-        override fun getItemCount(): Int = list.size
     }
+}
 
+@Composable
+fun UnitRow(unitRowData: MainFragment.UnitRowData, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(85.dp)
+            .clickable { onClick() }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp, end = 0.dp, top = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = unitRowData.resourceImage),
+                contentDescription = "icon",
+                modifier = Modifier.size(50.dp)
+            )
+
+            Text(
+                text = unitRowData.unitText,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 12.dp),
+                color = Color(0xFF1D0047),
+                fontSize = 15.sp,
+                lineHeight = 19.35.sp
+            )
+
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowRight,
+                contentDescription = "arrow",
+                modifier = Modifier.size(30.dp, 40.dp),
+                tint = Color.Gray
+            )
+        }
+
+        Divider(
+            color = Color(0xFFC3C3C3),
+            thickness = 1.dp,
+            modifier = Modifier.padding(start = 20.dp)
+        )
+    }
 }

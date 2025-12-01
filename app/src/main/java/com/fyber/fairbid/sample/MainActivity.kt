@@ -18,20 +18,28 @@ package com.fyber.fairbid.sample
 
 import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import com.fyber.FairBid
-import com.fyber.fairbid.utilities.MainFragment
 import com.fyber.fairbid.utilities.MainFragment.UnitType
-import com.fyber.fairbid.utilities.SplashScreenFragment
+import com.fyber.fairbid.utilities.MainScreen
+import com.fyber.fairbid.utilities.SplashScreen
+import kotlinx.coroutines.delay
 
 
 /**
  * The Main Activity,
  * responsible for starting the FairBid SDK and displaying the different ads - banner, interstitial, rewarded
  */
-class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     companion object {
         /**
@@ -42,20 +50,26 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         private const val PUBLISHERS_APP_ID = "109613"
     }
 
-
-    private val bannerFragment = BannerFragment.createInstance(UnitType.Banner)
-    private val mrecFragment = BannerFragment.createInstance(UnitType.Mrec)
-    private val rewardedFragment = RewardedFragment()
-    private val interstitialFragment = InterstitialFragment()
-    private val mainFragment = MainFragment()
-    private var shouldSplashScreen = true
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        splashScreen()
         startFairBidSdk(PUBLISHERS_APP_ID)
+
+        setContent {
+            MaterialTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    MainApp(
+                        onShowTestSuite = { showTestSuite(this) },
+                        onNavigateToBanner = { navigateToBanner() },
+                        onNavigateToMrec = { navigateToMrec() },
+                        onNavigateToRewarded = { navigateToRewarded() },
+                        onNavigateToInterstitial = { navigateToInterstitial() }
+                    )
+                }
+            }
+        }
     }
 
     /**
@@ -75,47 +89,89 @@ class MainActivity : MainFragment.FragmentListener, AppCompatActivity() {
         FairBid.showTestSuite(activity)
     }
 
-    /**
-     * Shows the splash screen for 2000 millis
-     */
-    private fun splashScreen() {
-        supportFragmentManager.beginTransaction().add(
-            R.id.fragment_container,
-            SplashScreenFragment()
-        ).commit()
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (shouldSplashScreen) {
-                supportFragmentManager.beginTransaction().setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
-                    .replace(R.id.fragment_container, mainFragment).commitAllowingStateLoss()
-                shouldSplashScreen = false
-            }
-        }, 2000)
-    }
-
-    /**
-     * Invoked by the MainFragment, telling us which fragment to present.
-     */
-    override fun onButtonClicked(unitType: UnitType) {
-        when (unitType) {
-            UnitType.Banner -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, bannerFragment)
-                    .addToBackStack(null).commit()
-            }
-            UnitType.Mrec -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, mrecFragment)
-                    .addToBackStack(null).commit()
-            }
-            UnitType.Rewarded -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, rewardedFragment)
-                    .addToBackStack(null).commit()
-            }
-            UnitType.Interstitial -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, interstitialFragment)
-                    .addToBackStack(null).commit()
-            }
-            UnitType.TestSuite -> {
-                showTestSuite(this)
+    private fun navigateToBanner() {
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    BannerScreen(
+                        unitType = UnitType.Banner,
+                        onBack = { recreate() }
+                    )
+                }
             }
         }
+    }
+
+    private fun navigateToMrec() {
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    BannerScreen(
+                        unitType = UnitType.Mrec,
+                        onBack = { recreate() }
+                    )
+                }
+            }
+        }
+    }
+
+    private fun navigateToRewarded() {
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    RewardedScreen(onBack = { recreate() })
+                }
+            }
+        }
+    }
+
+    private fun navigateToInterstitial() {
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    InterstitialScreen(onBack = { recreate() })
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MainApp(
+    onShowTestSuite: () -> Unit,
+    onNavigateToBanner: () -> Unit,
+    onNavigateToMrec: () -> Unit,
+    onNavigateToRewarded: () -> Unit,
+    onNavigateToInterstitial: () -> Unit
+) {
+    var showSplash by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        delay(2000)
+        showSplash = false
+    }
+
+    AnimatedVisibility(
+        visible = showSplash,
+        exit = fadeOut()
+    ) {
+        SplashScreen()
+    }
+
+    AnimatedVisibility(
+        visible = !showSplash,
+        enter = fadeIn()
+    ) {
+        MainScreen(
+            onButtonClicked = { unitType ->
+                when (unitType) {
+                    UnitType.Banner -> onNavigateToBanner()
+                    UnitType.Mrec -> onNavigateToMrec()
+                    UnitType.Rewarded -> onNavigateToRewarded()
+                    UnitType.Interstitial -> onNavigateToInterstitial()
+                    UnitType.TestSuite -> onShowTestSuite()
+                }
+            }
+        )
     }
 }

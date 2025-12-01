@@ -15,23 +15,53 @@
  */
 package com.fyber.fairbid.utilities
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fyber.FairBid
 import com.fyber.fairbid.sample.R
 
 /**
- * A simple {@link Fragment} subclass which Displays the Fyber logo and branding.
+ * A simple Composable which Displays the Fyber logo and branding.
  */
-class SplashScreenFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.splash_screen_fragment, container, false)
-        val sdkVersion: TextView = view.findViewById(R.id.sdk_version)
-        sdkVersion.text = getString(R.string.dt_fairbid) + " " + FairBid.SDK_VERSION
-        return view
+@Composable
+fun SplashScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = stringResource(id = R.string.dt_fairbid).uppercase(),
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+        }
+
+        Text(
+            text = "${stringResource(id = R.string.dt_fairbid)} ${FairBid.SDK_VERSION}".uppercase(),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 32.dp),
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            fontSize = 14.sp
+        )
     }
 }

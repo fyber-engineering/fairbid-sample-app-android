@@ -15,19 +15,28 @@
 */
 package com.fyber.fairbid.sample
 
-import android.app.Activity
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import android.view.Gravity
+import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import com.fyber.fairbid.ads.Banner
 import com.fyber.fairbid.ads.ImpressionData
 import com.fyber.fairbid.ads.banner.BannerError
@@ -36,6 +45,7 @@ import com.fyber.fairbid.ads.banner.BannerOptions
 import com.fyber.fairbid.ads.banner.BannerSize
 import com.fyber.fairbid.utilities.MainFragment
 import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
+import com.fyber.fairbid.utilities.LogsList
 
 /**
  * Log tag
@@ -43,241 +53,262 @@ import com.fyber.fairbid.utilities.OnScreenCallbacksHelper
 private const val BANNER_FRAGMENT_TAG = "BannerFragment"
 
 /**
- * A Fragment demonstrating how to request and display banner ads using the FairBid SDK.
+ * A Screen demonstrating how to request and display banner ads using the FairBid SDK.
  */
-class BannerFragment : Fragment(), OnScreenCallbacksHelper.LogsListener {
+@Composable
+fun BannerScreen(unitType: MainFragment.UnitType, onBack: () -> Unit) {
+    val context = LocalContext.current
+    val activity = context as? androidx.activity.ComponentActivity
 
-    companion object {
-        /**
-         * The Banner's placement name - as configured at Fyber console
-         * "BannerPlacementIdExample" can be used using the provided example APP_ID
-         * TODO change to your own configured placement.
-         */
-        private const val PLACEMENT_KEY = "PLACEMENT"
-        private const val IS_MREC_KEY = "IS_MREC"
-
-
-        fun createInstance(bannerType: MainFragment.UnitType): BannerFragment {
-            val BANNER_PLACEMENT_NAME = "197407"
-            val MREC_PLACEMENT_NAME = "936586"
-
-            val arguments = Bundle().apply {
-                when (bannerType) {
-                    MainFragment.UnitType.Banner -> {
-                        putString(PLACEMENT_KEY, BANNER_PLACEMENT_NAME)
-                        putBoolean(IS_MREC_KEY, false)
-                    }
-                    MainFragment.UnitType.Mrec -> {
-                        putString(PLACEMENT_KEY, MREC_PLACEMENT_NAME)
-                        putBoolean(IS_MREC_KEY, true)
-                    }
-                    else -> throw IllegalArgumentException("Unsupported banner type: $bannerType")
-                }
-            }
-            return BannerFragment().also {
-                it.arguments = arguments
-            }
-        }
+    val (bannerPlacementId, isMrec) = when (unitType) {
+        MainFragment.UnitType.Banner -> "197407" to false
+        MainFragment.UnitType.Mrec -> "936586" to true
+        else -> throw IllegalArgumentException("Unsupported banner type: $unitType")
     }
 
-    private lateinit var loadBannerButton: View
-    private lateinit var cleanCallBacks: Button
-    private lateinit var destroyBannerButton: Button
-    private lateinit var bannerContainer: ViewGroup
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var placementIcon: ImageView
-    private lateinit var progressBar: ProgressBar
-    private var fragmentView: View? = null
+    val bannerSize = if (isMrec) BannerSize.MREC else BannerSize.SMART
 
-    private lateinit var bannerPlacementId: String
-    private lateinit var bannerSize: BannerSize
+    var logs by remember { mutableStateOf(listOf<String>()) }
+    var isLoading by remember { mutableStateOf(false) }
+    var isAdAvailable by remember { mutableStateOf(false) }
+    var bannerContainer by remember { mutableStateOf<FrameLayout?>(null) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        bannerPlacementId = requireArguments().getString(PLACEMENT_KEY, "")
-        bannerSize = requireArguments().getBoolean(IS_MREC_KEY)
-            .let { isMrec -> if (isMrec) BannerSize.MREC else BannerSize.SMART }
-
-        if (fragmentView == null) {
-            fragmentView = inflater.inflate(R.layout.ad_container_fragment, container, false)
-            fragmentView?.let { it ->
-                initializeUiElements(it)
-                setListener()
-            }
-        }
-        return fragmentView
+    val addLog = { message: String ->
+        logs = logs + "${OnScreenCallbacksHelper.getCurrentTime()} - $message"
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    /**
-     * Called when the loadBannerButton is clicked
-     * This function provides an example for calling the API method Banner.display in order to display a banner placement
-     * @param bannerPlacementName name of placement to be requested
-     */
-    private fun displayBanner(bannerPlacementName: String) {
-        Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
-        val bannerOptions: BannerOptions = generateBannerOptions()
-        Banner.show(bannerPlacementName, bannerOptions, activity as Activity)
-        startRequestAnimation()
-    }
-
-    /**
-     * Convenience method. Generates a new instance of BannerOptions and configure it accordingly.
-     */
-    private fun generateBannerOptions(): BannerOptions {
-        //Calling the API method BannerOptions().placeInContainer in order to set banner position in the desired view group
-
-        return BannerOptions()
-            .placeInContainer(bannerContainer)
-            .withSize(bannerSize)
-    }
-
-    /**
-     * Called when the destroyBannerButton is clicked
-     * This function provides an example for calling the API method Banner.destroy in order to destroy a banner placement
-     * @param bannerPlacementName name of placement to be destroyed
-     */
-    private fun destroyBanner(bannerPlacementName: String) {
-        Log.v(BANNER_FRAGMENT_TAG, "destroyBanner()")
-        Banner.destroy(bannerPlacementName)
-        resetAnimation()
-    }
-
-    /**
-     * This function provides an example of Listening to FairBid Banner Callbacks and events.
-     */
-    private fun setListener() {
+    DisposableEffect(Unit) {
         val bannerListener = object : BannerListener {
             override fun onShow(placement: String, impressionData: ImpressionData) {
                 Log.v(BANNER_FRAGMENT_TAG, "onShow $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_SHOW)
+                addLog(OnScreenCallbacksHelper.ON_SHOW)
             }
 
             override fun onRequestStart(placement: String, requestId: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onRequestStart $placement - $requestId")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_REQUEST_START)
+                addLog(OnScreenCallbacksHelper.ON_REQUEST_START)
             }
 
             override fun onClick(placement: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onClick $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_CLICK)
+                addLog(OnScreenCallbacksHelper.ON_CLICK)
             }
 
             override fun onLoad(placement: String) {
                 Log.v(BANNER_FRAGMENT_TAG, "onLoad $placement")
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_LOAD)
-                onAdAvailableAnimation()
+                addLog(OnScreenCallbacksHelper.ON_LOAD)
+                isLoading = false
+                isAdAvailable = true
             }
 
             override fun onError(placement: String, error: BannerError) {
                 Log.v(BANNER_FRAGMENT_TAG, "onError $placement, error:" + error.errorMessage)
-                OnScreenCallbacksHelper.logAndToast(recyclerView, context, OnScreenCallbacksHelper.ON_ERROR + ": " + error.errorMessage)
-                resetAnimation()
+                addLog("${OnScreenCallbacksHelper.ON_ERROR}: ${error.errorMessage}")
+                isLoading = false
+                isAdAvailable = false
             }
-
         }
         Banner.setBannerListener(bannerListener)
-    }
 
-    /**
-     * Internal sample method. initialize the UI elements in this fragment.
-     * @param view the container view for this fragment
-     */
-    private fun initializeUiElements(view: View) {
-        initLogRecycler(view)
-        initTextViews(view)
-        initButtons(view)
-        placementIcon = view.findViewById(R.id.placement_icon)
-        when (bannerSize) {
-            BannerSize.SMART -> R.drawable.fb_ic_banner
-            BannerSize.MREC -> R.drawable.fb_ic_mrec
-        }.let { placementIcon.setImageResource(it) }
-        bannerContainer = view.findViewById(R.id.banner_container)
-        bannerContainer.visibility = View.VISIBLE
-    }
-
-    /**
-     * Internal sample method. initialize the recycler view used to display callbacks and events.
-     * @param view the container view for this fragment
-     */
-    private fun initLogRecycler(view: View) {
-        recyclerView = view.findViewById(R.id.recycler_callbacks)
-        OnScreenCallbacksHelper.configureRecycler(recyclerView, requireActivity(), this)
-    }
-
-    /**
-     * Internal sample method. initialize the text views in this fragment
-     * @param view the container view for this fragment
-     */
-    private fun initTextViews(view: View) {
-        val placementName: TextView = view.findViewById(R.id.placement_name_tv) as TextView
-        placementName.text = bannerPlacementId
-        val headerName: TextView = view.findViewById(R.id.fragment_header) as TextView
-        headerName.text = getString(R.string.banner_header_name)
-        val placementIcon: ImageView = view.findViewById(R.id.placement_icon) as ImageView
-        placementIcon.background = ContextCompat.getDrawable(requireContext(), R.drawable.fb_ic_banner)
-    }
-
-    /**
-     * Internal sample method. initialize the buttons and click listeners in this fragment
-     * @param view the container view for this fragment
-     */
-    private fun initButtons(view: View) {
-        progressBar = view.findViewById(R.id.progress_bar)
-        val textView: TextView = view.findViewById(R.id.request_ad)
-        textView.text = getString(R.string.show)
-        loadBannerButton = view.findViewById(R.id.text_progress_bar)
-
-        loadBannerButton.setOnClickListener {
-            displayBanner(bannerPlacementId)
-        }
-        destroyBannerButton = view.findViewById(R.id.show_ad)
-        destroyBannerButton.background = ContextCompat.getDrawable(requireContext(), R.drawable.button_effect_banner)
-        destroyBannerButton.text = getString(R.string.destroy)
-        destroyBannerButton.setOnClickListener {
-            destroyBanner(bannerPlacementId)
-        }
-        val backButton = view.findViewById(R.id.back_button) as ImageView
-        backButton.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
-
-        cleanCallBacks = view.findViewById(R.id.clean_callback_button) as Button
-        cleanCallBacks.setOnClickListener {
-            cleanCallBacks.isEnabled = false
-            OnScreenCallbacksHelper.clearLog(recyclerView)
+        onDispose {
+            Banner.destroy(bannerPlacementId)
         }
     }
 
-    /**
-     * Internal sample method.
-     * Starts the request/loading animation
-     */
-    private fun startRequestAnimation() {
-        progressBar.visibility = View.VISIBLE
-        destroyBannerButton.isEnabled = false
-    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        // Header
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFEFEFF4))
+                .padding(top = 10.dp, bottom = 11.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowLeft,
+                contentDescription = "Back",
+                modifier = Modifier
+                    .size(30.dp)
+                    .align(Alignment.CenterStart)
+                    .clickable { onBack() },
+                tint = Color.Black
+            )
 
-    /**
-     * Internal sample method.
-     * Stops the request/loading animation and enables destroying the banner
-     */
-    private fun onAdAvailableAnimation() {
-        destroyBannerButton.isEnabled = true
-        progressBar.visibility = View.GONE
-    }
+            Text(
+                text = stringResource(id = R.string.banner_header_name),
+                modifier = Modifier.align(Alignment.Center),
+                fontSize = 20.sp,
+                color = Color(0xFF1D0047),
+                lineHeight = 25.8.sp
+            )
+        }
 
-    /**
-     * Internal sample method.
-     * Resets the UI state for the progress animation / destroy button
-     */
-    private fun resetAnimation() {
-        destroyBannerButton.isEnabled = false
-        progressBar.visibility = View.GONE
-    }
+        Divider(color = Color(0xFFC3C3C3), thickness = 1.dp)
 
-    /**
-     * Invoked when the on-screen log became non-empty. used to enable/disable the clean button
-     */
-    override fun onFirstLogLine() {
-        cleanCallBacks.isEnabled = true
+        // Placement info
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, top = 26.dp, end = 5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(
+                    id = if (isMrec) R.drawable.fb_ic_mrec else R.drawable.fb_ic_banner
+                ),
+                contentDescription = "Placement icon",
+                modifier = Modifier.size(50.dp)
+            )
+
+            Column(
+                modifier = Modifier.padding(start = 12.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.placement_id),
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = bannerPlacementId,
+                    fontSize = 14.sp,
+                    color = Color.Black
+                )
+            }
+        }
+
+        // Buttons
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Request/Show button with progress
+            Box(
+                modifier = Modifier
+                    .weight(0.5f)
+                    .height(48.dp)
+                    .background(Color(0xFF6A1B9A))
+                    .clickable {
+                        Log.v(BANNER_FRAGMENT_TAG, "displayBanner()")
+                        bannerContainer?.let { container ->
+                            val bannerOptions = BannerOptions()
+                                .placeInContainer(container)
+                                .withSize(bannerSize)
+                            activity?.let { Banner.show(bannerPlacementId, bannerOptions, it) }
+                            isLoading = true
+                        }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(35.dp),
+                            color = Color.White,
+                            strokeWidth = 3.dp
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+                    Text(
+                        text = stringResource(id = R.string.show),
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+
+            // Destroy button
+            Button(
+                onClick = {
+                    Log.v(BANNER_FRAGMENT_TAG, "destroyBanner()")
+                    Banner.destroy(bannerPlacementId)
+                    isLoading = false
+                    isAdAvailable = false
+                },
+                enabled = isAdAvailable,
+                modifier = Modifier
+                    .weight(0.5f)
+                    .height(48.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFF6A1B9A),
+                    disabledBackgroundColor = Color(0xFFC5D0DE)
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.destroy),
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            }
+        }
+
+        // Banner container
+        AndroidView(
+            factory = { ctx ->
+                FrameLayout(ctx).apply {
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        gravity = Gravity.CENTER_HORIZONTAL
+                    }
+                    bannerContainer = this
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(top = 20.dp)
+        )
+
+        // Callbacks list header
+        Text(
+            text = stringResource(id = R.string.callbacks_list),
+            modifier = Modifier.padding(start = 20.dp, top = 15.dp),
+            fontSize = 14.sp,
+            color = Color.Black
+        )
+
+        Divider(
+            color = Color(0xFFC3C3C3),
+            thickness = 1.dp,
+            modifier = Modifier.padding(top = 11.dp)
+        )
+
+        // Logs list
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
+            LogsList(logs = logs)
+        }
+
+        // Clean button
+        Button(
+            onClick = { logs = emptyList() },
+            enabled = logs.isNotEmpty(),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 30.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFF6A1B9A),
+                disabledBackgroundColor = Color(0xFFC5D0DE)
+            )
+        ) {
+            Text(
+                text = stringResource(id = R.string.clean_callbacks_list),
+                color = Color.White,
+                fontSize = 16.sp
+            )
+        }
     }
 }

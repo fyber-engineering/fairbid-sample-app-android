@@ -15,35 +15,29 @@
  */
 package com.fyber.fairbid.utilities
 
-import android.app.Activity
-import android.content.Context
 import android.os.Build
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.fyber.fairbid.sample.R
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
- * Utility helper, displays callback events on screen using a recycler view
+ * Utility helper, displays callback events on screen using a lazy column
  */
 class OnScreenCallbacksHelper {
-
-    /**
-     * Interface for listeners which wants to be notified when the log is displaying something
-     */
-    interface LogsListener {
-        /**
-         * Invoked when the logs became non-empty
-         */
-        fun onFirstLogLine()
-    }
 
     companion object {
         //Callbacks
@@ -60,94 +54,53 @@ class OnScreenCallbacksHelper {
         const val ON_ERROR = "onError()"
         const val ON_LOAD = "onLoad()"
 
-        /**
-         * Configures the supplied recycler view to display supplied events.
-         * @param recyclerView The target recycler view
-         * @param activity the hosting activity for context
-         * @param listener a listener for callbacks
-         */
-        fun configureRecycler(recyclerView: RecyclerView, activity: Activity, listener: LogsListener) {
-            recyclerView.apply {
-                layoutManager = LinearLayoutManager(activity)
-                val emptyLogRow = ArrayList<String>()
-                adapter = LogsAdapter(emptyLogRow, listener)
-            }
-        }
-
-        /**
-         * Adds the supplied log string to the recycler view and presents a toast.
-         * @param recyclerView The target recycler view
-         * @param context the hosting context
-         * @param log the relevant line to log
-         */
-        fun logAndToast(recyclerView: RecyclerView, context: Context?, log: String) {
-            context?.let {
-                Toast.makeText(it, log, Toast.LENGTH_SHORT).show()
-            }
-            val recyclerViewAdapter: LogsAdapter = recyclerView.adapter as LogsAdapter
-            recyclerViewAdapter.addLog(log)
-        }
-
-        /**
-         * Clears the recycler view from any presented item
-         * @param recyclerView the target recycler view
-         */
-        fun clearLog(recyclerView: RecyclerView) {
-            val recyclerViewAdapter: LogsAdapter = recyclerView.adapter as LogsAdapter
-            recyclerViewAdapter.clearList()
-        }
-    }
-
-    /**
-     * A view holder for log lines
-     */
-    class LogDataHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.item_log_row, parent, false)) {
-
-        private var logTextView: TextView = itemView.findViewById(R.id.row_log)
-
-        fun bind(text: String) {
-            logTextView.text = text
-        }
-    }
-
-    /**
-     * An adapter for the log lines.
-     */
-    class LogsAdapter(private val logsList: ArrayList<String>, private var listener: LogsListener) : RecyclerView.Adapter<LogDataHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogDataHolder {
-            val inflater = LayoutInflater.from(parent.context)
-            return LogDataHolder(inflater, parent)
-        }
-
-        override fun onBindViewHolder(holder: LogDataHolder, position: Int) {
-            holder.bind(logsList[position])
-        }
-
-        override fun getItemCount(): Int = logsList.size
-
-        fun addLog(log: String) {
-            if (logsList.isEmpty()) {
-                listener.onFirstLogLine()
-            }
-            logsList.add("${getCurrentTime()} - $log")
-            notifyDataSetChanged()
-        }
-
-        fun clearList() {
-            logsList.clear()
-            notifyDataSetChanged()
-        }
-
-        private fun getCurrentTime(): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        fun getCurrentTime(): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val current = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             current.format(formatter)
         } else {
-            val date = Date();
-            val formatter = SimpleDateFormat("HH:mm:ss")
+            val date = Date()
+            val formatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
             formatter.format(date)
         }
     }
+}
+
+@Composable
+fun LogsList(logs: List<String>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        items(logs) { log ->
+            LogRow(log = log)
+        }
+    }
+}
+
+@Composable
+fun LogRow(log: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(34.dp)
+    ) {
+        Text(
+            text = log,
+            modifier = Modifier.padding(start = 16.dp, top = 6.dp, bottom = 6.dp),
+            color = Color.Black,
+            fontSize = 13.sp
+        )
+
+        Divider(
+            color = Color(0xFFC3C3C3),
+            thickness = 1.dp,
+            modifier = Modifier.padding(start = 16.dp)
+        )
+    }
+}
+
+@Composable
+fun ShowToast(message: String) {
+    val context = LocalContext.current
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
