@@ -68,4 +68,11 @@ dependencies {
 
     // necessary when including several mediated networks
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    // AdMob + DTX mediation
+    implementation("com.google.android.gms:play-services-ads:25.2.0")
+    implementation('com.google.ads.mediation:fyber:8.4.2.2') {
+        exclude group: 'com.fyber', module: 'marketplace-sdk'
+    }
+    implementation 'com.fyber:marketplace-sdk:8.4.2.1'
 }
