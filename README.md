@@ -9,10 +9,10 @@ Please note that when it comes to actually demonstrating the product "FairBid" a
 * Android build plugin 3.4.2 / Gradle 5.4.1 / Kotlin 1.3.61 
 
 #### Navigating the sample code
-* SDK Initialization is located in the [MainActivity](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/MainActivity.kt)
-* Requesting Banner Ads - [BannerFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/BannerFragment.kt)
-* Requesting Interstitial Ads - [InterstitialFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/InterstitialFragment.kt)
-* Requesting Rewarded Ads - [RewardedFragment](https://github.com/Heyzap/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/RewardedFragment.kt)
+* SDK Initialization is located in the [MainActivity](https://github.com/DigitalTurbine/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/MainActivity.kt)
+* Requesting Banner Ads - [BannerFragment](https://github.com/DigitalTurbine/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/BannerFragment.kt)
+* Requesting Interstitial Ads - [InterstitialFragment](https://github.com/DigitalTurbine/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/InterstitialFragment.kt)
+* Requesting Rewarded Ads - [RewardedFragment](https://github.com/DigitalTurbine/fairbid-sample-app-android/blob/master/app/src/main/java/com/fyber/fairbid/sample/RewardedFragment.kt)
 
 #### Support and documentation
 Please visit our [documentation](https://dev-android.fyber.com/docs)
